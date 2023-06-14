@@ -2,6 +2,7 @@ package com.diac.ydeas.domain.model;
 
 import com.diac.ydeas.domain.enumeration.Rate;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 /**
@@ -33,5 +34,7 @@ public class IdeaRate {
     /**
      * Оценка
      */
+    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Idea rate is required")
     private Rate rate;
 }
