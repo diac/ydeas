@@ -12,6 +12,7 @@
     <description>Ydeas Project</description>
     <modules>
         <module>domain</module>
+        <module>ideas</module>
     </modules>
 
     <properties>
