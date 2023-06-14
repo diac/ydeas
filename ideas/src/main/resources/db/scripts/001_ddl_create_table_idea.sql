@@ -3,7 +3,7 @@ CREATE TABLE idea (
     title VARCHAR NOT NULL,
     description VARCHAR NOT NULL,
     author_user_id INTEGER NOT NULL,
-    created_at TIMESTAMP
+    created_at TIMESTAMP NOT NULL
 );
 
 COMMENT ON TABLE idea IS 'Идея';
