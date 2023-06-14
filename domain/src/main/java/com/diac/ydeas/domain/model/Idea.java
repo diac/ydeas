@@ -4,13 +4,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 /**
  * Модель данных "Идея"
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
 public class Idea {
 
@@ -39,4 +41,9 @@ public class Idea {
      */
     @NotNull(message = "Idea author is required")
     private User author;
+
+    /**
+     * Дата и время создания идеи
+     */
+    private LocalDateTime createdAt;
 }
