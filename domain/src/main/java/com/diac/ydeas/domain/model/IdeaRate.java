@@ -1,11 +1,14 @@
 package com.diac.ydeas.domain.model;
 
 import com.diac.ydeas.domain.enumeration.Rate;
+import jakarta.persistence.*;
 import lombok.*;
 
 /**
  * Модель данных "Оценка идеи"
  */
+@Entity
+@Table(name = "idea_rate")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,16 +17,18 @@ import lombok.*;
 public class IdeaRate {
 
     /**
-     * Идея
+     * Идентификатор оценки идеи
      */
+    @EmbeddedId
     @EqualsAndHashCode.Include
-    private Idea idea;
+    private IdeaRateId ideaRateId;
 
     /**
-     * Пользователь, поставивший оценку
+     * Идея
      */
-    @EqualsAndHashCode.Include
-    private User user;
+    @MapsId("idea_id")
+    @ManyToOne
+    private Idea idea;
 
     /**
      * Оценка
