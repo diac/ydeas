@@ -1,0 +1,11 @@
+server:
+  port: port_number
+spring:
+  application:
+    name: IDEAS
+  datasource:
+    url: db_url
+    username: db_username
+    password: db_password
+  liquibase:
+    change-log: classpath:db/liquibase-changelog.xml
