@@ -79,6 +79,7 @@ public class IdeaRateJpaService implements IdeaRateService {
      *
      * @param ideaRateId Идентификатор оценки идеи (объект IdeaRateId)
      * @return Оценка идеи
+     * @throws ResourceNotFoundException Если ничего не найдено
      */
     @Override
     public IdeaRate findById(IdeaRateId ideaRateId) {
@@ -93,6 +94,7 @@ public class IdeaRateJpaService implements IdeaRateService {
      *
      * @param ideaRate Новая оценка идеи
      * @return Сохраненная оценка идеи
+     * @throws ResourceConstraintViolationException в случае, если при обращении к ресурсу нарушаются наложенные на него ограничения
      */
     @Override
     public IdeaRate add(IdeaRate ideaRate) {
@@ -109,6 +111,8 @@ public class IdeaRateJpaService implements IdeaRateService {
      * @param ideaRateId Идентификатор оценки идеи (объект IdeaRateId)
      * @param ideaRate   Объект с обновленными данными оценки идеи
      * @return Обновленная оценка идеи
+     * @throws ResourceNotFoundException            При попытке обновить несуществующую оценку идеи
+     * @throws ResourceConstraintViolationException в случае, если при обращении к ресурсу нарушаются наложенные на него ограничения
      */
     @Override
     public IdeaRate update(IdeaRateId ideaRateId, IdeaRate ideaRate) {
@@ -129,6 +133,7 @@ public class IdeaRateJpaService implements IdeaRateService {
      * Удалить оценку идеи из системы
      *
      * @param ideaRateId Идентификатор оценки идеи (объект IdeaRateId)
+     * @throws ResourceNotFoundException При попытке удалить несуществующую оценку идеи
      */
     @Override
     public void delete(IdeaRateId ideaRateId) {
