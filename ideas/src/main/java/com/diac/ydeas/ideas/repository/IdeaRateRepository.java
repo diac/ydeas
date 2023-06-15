@@ -3,12 +3,14 @@ package com.diac.ydeas.ideas.repository;
 import com.diac.ydeas.domain.model.IdeaRate;
 import com.diac.ydeas.domain.model.IdeaRateId;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * Репозиторий для хранения объектов IdeaRate (Оценка идеи)
  */
+@Repository
 public interface IdeaRateRepository extends JpaRepository<IdeaRate, IdeaRateId> {
 
     /**
