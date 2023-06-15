@@ -18,14 +18,19 @@ import lombok.*;
 public class IdeaReview {
 
     /**
-     * Идея
+     * Идентификатор идеи
      */
     @Id
     @EqualsAndHashCode.Include
+    @Column(name = "idea_id")
     private int ideaId;
 
+    /**
+     * Идея
+     */
     @OneToOne
-    @JoinColumn(name = "idea_id", referencedColumnName = "id")
+    @JoinColumn(name = "idea_id")
+    @MapsId
     private Idea idea;
 
     /**
@@ -39,6 +44,7 @@ public class IdeaReview {
      * Статус идеи после рассмотрения
      */
     @Enumerated(EnumType.STRING)
+    @Column(name = "idea_status")
     @NotNull(message = "Idea status is required")
     private IdeaStatus ideaStatus;
 }
