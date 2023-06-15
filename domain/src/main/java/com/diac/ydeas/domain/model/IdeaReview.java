@@ -25,7 +25,7 @@ public class IdeaReview {
     private int ideaId;
 
     @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "idea_id")
+    @JoinColumn(name = "idea_id", referencedColumnName = "id")
     private Idea idea;
 
     /**
