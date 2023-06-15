@@ -25,13 +25,6 @@ public class IdeaRate {
     private IdeaRateId ideaRateId;
 
     /**
-     * Идея
-     */
-    @MapsId("idea_id")
-    @ManyToOne
-    private Idea idea;
-
-    /**
      * Оценка
      */
     @Enumerated(EnumType.STRING)
