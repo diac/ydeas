@@ -111,7 +111,7 @@ public class IdeaRateRepositoryTest extends AbstractRepositoryIntegrationTest {
                         .rate(rate)
                         .build()
         );
-        List<IdeaRate> ideaRates = ideaRateRepository.findALlByIdeaRateIdUserId(number);
+        List<IdeaRate> ideaRates = ideaRateRepository.findAllByIdeaRateIdUserId(number);
         assertThat(ideaRates).contains(ideaRate);
     }
 

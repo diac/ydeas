@@ -27,5 +27,5 @@ public interface IdeaRateRepository extends JpaRepository<IdeaRate, IdeaRateId> 
      * @param userId Идентификатор пользователя
      * @return Список с оценками
      */
-    List<IdeaRate> findALlByIdeaRateIdUserId(int userId);
+    List<IdeaRate> findAllByIdeaRateIdUserId(int userId);
 }

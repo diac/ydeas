@@ -70,8 +70,8 @@ public class IdeaRateJpaService implements IdeaRateService {
      * @return Список с оценками
      */
     @Override
-    public List<IdeaRate> findALlByIdeaRateIdUserId(int userId) {
-        return ideaRateRepository.findALlByIdeaRateIdUserId(userId);
+    public List<IdeaRate> findAllByIdeaRateIdUserId(int userId) {
+        return ideaRateRepository.findAllByIdeaRateIdUserId(userId);
     }
 
     /**
