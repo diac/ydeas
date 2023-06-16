@@ -48,13 +48,13 @@ public class IdeaController {
      * Получить идею по UD
      *
      * @param id Идентификатор идеи
-     * @return Ответ с идеей и статусом Found
+     * @return Ответ с идеей и статусом OK
      */
     @GetMapping("/{id}")
     public ResponseEntity<Idea> getById(@PathVariable("id") int id) {
         return new ResponseEntity<>(
                 ideaService.findById(id),
-                HttpStatus.FOUND
+                HttpStatus.OK
         );
     }
 
