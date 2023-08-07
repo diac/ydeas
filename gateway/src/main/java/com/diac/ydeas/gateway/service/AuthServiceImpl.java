@@ -60,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public List<Authority> getAuthoritiesFromToken(String token) {
         DecodedJWT decodedJWT = JWT.decode(token);
-        Map<String, Collection<String>> realmAccess = decodedJWT.getClaim(REALM_ACCESS_CLAIM)
+        @SuppressWarnings("unchecked") Map<String, Collection<String>> realmAccess = decodedJWT.getClaim(REALM_ACCESS_CLAIM)
                 .as(HashMap.class);
         Collection<String> roles = realmAccess.get(ROLES_KEY);
         return roles.stream()
