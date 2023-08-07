@@ -6,22 +6,12 @@ package com.diac.ydeas.domain.enumeration;
 public enum Authority {
 
     /**
-     * Чтение идей
+     * Пользователь сервиса "Идеи"
      */
-    IDEAS_READ,
+    IDEAS_USER,
 
     /**
-     * Запись идей
+     * Эксперт сервиса "Идеи"
      */
-    IDEAS_WRITE,
-
-    /**
-     * Голосование за идеи
-     */
-    IDEAS_VOTE,
-
-    /**
-     * Одобрение идей
-     */
-    IDEAS_APPROVE
+    IDEAS_EXPERT
 }

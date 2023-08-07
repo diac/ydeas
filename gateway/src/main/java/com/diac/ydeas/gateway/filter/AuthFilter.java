@@ -40,10 +40,8 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
      * Перечень ACL-записей шлюза
      */
     private static final List<AclRecord> ACL = List.of(
-            new AclRecord("/ideas", HTTP_READ_METHODS, Authority.IDEAS_READ),
-            new AclRecord("/ideas", HTTP_READ_METHODS, Authority.IDEAS_WRITE),
-            new AclRecord("/ideas", HTTP_READ_METHODS, Authority.IDEAS_VOTE),
-            new AclRecord("/ideas", HTTP_READ_METHODS, Authority.IDEAS_APPROVE)
+            new AclRecord("/ideas", HTTP_READ_METHODS, Authority.IDEAS_USER),
+            new AclRecord("/ideas", HTTP_READ_METHODS, Authority.IDEAS_EXPERT)
     );
 
     /**
