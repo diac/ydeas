@@ -1,0 +1,22 @@
+server:
+  port: port_number
+spring:
+  application:
+    name: GATEWAY
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: IDEAS
+          uri: ideas_service_uri
+          predicates:
+            - Path=/ideas/**
+          filters:
+            - AuthFilter
+            - RewritePath=/ideas/(?<segment>.*), /$\{segment}
+eureka:
+  client:
+    service-url:
+      defaultZone: eureka-default-zone-url
