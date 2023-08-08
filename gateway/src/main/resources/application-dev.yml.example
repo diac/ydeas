@@ -16,6 +16,13 @@ spring:
           filters:
             - AuthFilter
             - RewritePath=/ideas/(?<segment>.*), /$\{segment}
+        - id: USERS
+          uri: users_service_uri
+          predicates:
+            - Path=/users/**
+          filters:
+            - AuthFilter
+            - RewritePath=/users/(?<segment>.*), /$\{segment}
 eureka:
   client:
     service-url:
