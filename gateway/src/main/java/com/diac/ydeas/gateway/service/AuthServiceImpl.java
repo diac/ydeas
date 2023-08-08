@@ -66,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
         return roles.stream()
                 .filter(
                         role -> Arrays.stream(UserRole.values())
-                                .anyMatch(authorityValue -> authorityValue.toString().equalsIgnoreCase(role))
+                                .anyMatch(roleValue -> roleValue.toString().equalsIgnoreCase(role))
                 )
                 .map(UserRole::valueOf)
                 .toList();
