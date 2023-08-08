@@ -1,0 +1,9 @@
+server:
+  port: port_number
+spring:
+  application:
+    name: USERS
+eureka:
+  client:
+    service-url:
+      defaultZone: eureka-default-zone-url
