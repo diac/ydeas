@@ -7,3 +7,9 @@ eureka:
   client:
     service-url:
       defaultZone: eureka-default-zone-url
+# noinspection undefined
+keycloak:
+  serverUrl: keycloak_url
+  realmName: app_keycloak_realm
+  clientId: keycloak_client_id
+  clientSecret: keycloak_client_secret
