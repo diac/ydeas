@@ -9,7 +9,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.diac</groupId>
     <artifactId>users</artifactId>
 
     <properties>
@@ -51,6 +50,12 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.keycloak</groupId>
+            <artifactId>keycloak-admin-client</artifactId>
+            <version>22.0.1</version>
         </dependency>
     </dependencies>
 
