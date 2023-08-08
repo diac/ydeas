@@ -1,6 +1,6 @@
 package com.diac.ydeas.gateway.service;
 
-import com.diac.ydeas.domain.enumeration.Authority;
+import com.diac.ydeas.domain.enumeration.UserRole;
 import com.diac.ydeas.domain.model.AclRecord;
 import org.springframework.web.server.ServerWebExchange;
 
@@ -21,12 +21,12 @@ public interface AuthService {
     String getToken(ServerWebExchange exchange) throws IllegalArgumentException;
 
     /**
-     * Получить список полномочий из токена
+     * Получить список ролей из токена
      *
      * @param token Токен
-     * @return Список полномочий
+     * @return Список ролей
      */
-    List<Authority> getAuthoritiesFromToken(String token);
+    List<UserRole> getRolesFromToken(String token);
 
     /**
      * Проверить, разрешен ли обмен exchange для перечня ACL-записей

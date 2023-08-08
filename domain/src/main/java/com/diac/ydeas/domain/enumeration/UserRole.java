@@ -13,5 +13,16 @@ public enum UserRole {
     /**
      * Эксперт
      */
-    EXPERT
+    EXPERT;
+
+    public static boolean contains(String test) {
+
+        for (UserRole userRole : UserRole.values()) {
+            if (userRole.name().equals(test)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

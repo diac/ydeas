@@ -1,6 +1,6 @@
 package com.diac.ydeas.gateway.filter;
 
-import com.diac.ydeas.domain.enumeration.Authority;
+import com.diac.ydeas.domain.enumeration.UserRole;
 import com.diac.ydeas.domain.model.AclRecord;
 import com.diac.ydeas.gateway.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +40,10 @@ public class AuthFilter extends AbstractGatewayFilterFactory<AuthFilter.Config> 
      * Перечень ACL-записей шлюза
      */
     private static final List<AclRecord> ACL = List.of(
-            new AclRecord("/ideas", HTTP_READ_METHODS, Authority.IDEAS_USER),
-            new AclRecord("/ideas", HTTP_READ_METHODS, Authority.IDEAS_EXPERT)
+            new AclRecord("/ideas", HTTP_READ_METHODS, UserRole.USER),
+            new AclRecord("/ideas", HTTP_READ_METHODS, UserRole.EXPERT),
+            new AclRecord("/users", HTTP_READ_METHODS, UserRole.USER),
+            new AclRecord("/users", HTTP_READ_METHODS, UserRole.EXPERT)
     );
 
     /**

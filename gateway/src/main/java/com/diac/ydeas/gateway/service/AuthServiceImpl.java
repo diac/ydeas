@@ -2,7 +2,7 @@ package com.diac.ydeas.gateway.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.diac.ydeas.domain.enumeration.Authority;
+import com.diac.ydeas.domain.enumeration.UserRole;
 import com.diac.ydeas.domain.model.AclRecord;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -58,17 +58,17 @@ public class AuthServiceImpl implements AuthService {
      * @return Список полномочий
      */
     @Override
-    public List<Authority> getAuthoritiesFromToken(String token) {
+    public List<UserRole> getRolesFromToken(String token) {
         DecodedJWT decodedJWT = JWT.decode(token);
         @SuppressWarnings("unchecked") Map<String, Collection<String>> realmAccess = decodedJWT.getClaim(REALM_ACCESS_CLAIM)
                 .as(HashMap.class);
         Collection<String> roles = realmAccess.get(ROLES_KEY);
         return roles.stream()
                 .filter(
-                        role -> Arrays.stream(Authority.values())
+                        role -> Arrays.stream(UserRole.values())
                                 .anyMatch(authorityValue -> authorityValue.toString().equalsIgnoreCase(role))
                 )
-                .map(Authority::valueOf)
+                .map(UserRole::valueOf)
                 .toList();
     }
 
@@ -86,7 +86,7 @@ public class AuthServiceImpl implements AuthService {
                         aclRecord ->
                                 exchange.getRequest().getPath().toString().startsWith(aclRecord.uri())
                                         && aclRecord.httpMethods().contains(exchange.getRequest().getMethod())
-                                        && getAuthoritiesFromToken(getToken(exchange)).contains(aclRecord.requiredAuthority())
+                                        && getRolesFromToken(getToken(exchange)).contains(aclRecord.userRole())
                 ).toList()
                 .isEmpty();
     }

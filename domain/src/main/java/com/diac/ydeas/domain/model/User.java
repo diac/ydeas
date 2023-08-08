@@ -5,6 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.Set;
+import java.util.UUID;
+
 /**
  * Модель данных "Пользователь"
  */
@@ -15,8 +18,11 @@ import lombok.*;
 @Builder
 public class User {
 
+    /**
+     * Идентификатор пользователя
+     */
     @EqualsAndHashCode.Include
-    private int id;
+    private UUID uuid;
 
     /**
      * Имя пользователя
@@ -26,20 +32,18 @@ public class User {
     private String username;
 
     /**
-     * Пароль
-     */
-    @NotNull(message = "Password is required")
-    private char[] password;
-
-    /**
      * Email пользователя
      */
     @NotNull(message = "User email is required")
     @NotBlank(message = "User email cannot be blank")
     private String email;
 
+    private String firstName;
+
+    private String lastName;
+
     /**
-     * Роль пользователя
+     * Роли пользователя
      */
-    private UserRole userRole;
+    private Set<UserRole> userRoles;
 }
