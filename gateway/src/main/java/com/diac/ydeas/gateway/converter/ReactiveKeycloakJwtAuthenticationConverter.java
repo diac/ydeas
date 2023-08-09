@@ -9,8 +9,10 @@ import org.springframework.security.oauth2.server.resource.authentication.Reacti
 import org.springframework.util.Assert;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.annotation.NonNull;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Конвертер, преобразующий данные аутентификации из формата KeyCloak в AbstractAuthenticationToken
@@ -45,9 +47,9 @@ public final class ReactiveKeycloakJwtAuthenticationConverter implements Convert
      * @return Объект Mono<AbstractAuthenticationToken>, содержащий данные аутентификации
      */
     @Override
-    public Mono<AbstractAuthenticationToken> convert(Jwt jwt) {
+    public Mono<AbstractAuthenticationToken> convert(@NonNull Jwt jwt) {
         // @formatter:off
-        return this.jwtGrantedAuthoritiesConverter.convert(jwt)
+        return Objects.requireNonNull(this.jwtGrantedAuthoritiesConverter.convert(jwt))
                 .collectList()
                 .map((authorities) -> new JwtAuthenticationToken(jwt, authorities, extractUsername(jwt)));
         // @formatter:on
@@ -59,7 +61,7 @@ public final class ReactiveKeycloakJwtAuthenticationConverter implements Convert
      * @param jwt JWT-токен
      * @return Имя пользователя
      */
-    protected String extractUsername(Jwt jwt) {
+    private String extractUsername(Jwt jwt) {
         return jwt.hasClaim(USERNAME_CLAIM) ? jwt.getClaimAsString(USERNAME_CLAIM) : jwt.getSubject();
     }
 
