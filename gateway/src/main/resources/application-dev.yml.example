@@ -23,6 +23,11 @@ spring:
           filters:
             - AuthFilter
             - RewritePath=/users/(?<segment>.*), /$\{segment}
+    security:
+      oauth2:
+        resourceserver:
+          jwt:
+            issuer-uri: jwt_issuer_uri
 eureka:
   client:
     service-url:
