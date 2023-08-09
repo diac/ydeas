@@ -1,6 +1,7 @@
 package com.diac.ydeas.ideas.controller;
 
 import com.diac.ydeas.domain.model.Idea;
+import com.diac.ydeas.domain.model.IdeaInputDto;
 import com.diac.ydeas.ideas.service.IdeaService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 /**
  * Контроллер, реализующий доступ к объектам модели Idea
@@ -61,13 +65,20 @@ public class IdeaController {
     /**
      * Добавить новую идею в систему
      *
-     * @param idea Новая идея
+     * @param ideaInputDto   DTO с данными новой идеи
+     * @param authentication Объект Authentication
      * @return Ответ с созданной идеей
      */
     @PostMapping("")
-    public ResponseEntity<Idea> post(@RequestBody @Valid Idea idea) {
+    public ResponseEntity<Idea> post(
+            @RequestBody @Valid IdeaInputDto ideaInputDto,
+            Authentication authentication
+    ) {
         return new ResponseEntity<>(
-                ideaService.add(idea),
+                ideaService.add(
+                        ideaInputDto,
+                        UUID.fromString(authentication.getName())
+                ),
                 HttpStatus.CREATED
         );
     }
@@ -75,17 +86,23 @@ public class IdeaController {
     /**
      * Обновить данные идеи
      *
-     * @param id   Идентификатор идеи
-     * @param idea Объект с обновленными данными идеи
+     * @param id             Идентификатор идеи
+     * @param ideaInputDto   DTO с обновленными данными идеи
+     * @param authentication Объект Authentication
      * @return Ответ с обновленной идеей
      */
     @PutMapping("/{id}")
     public ResponseEntity<Idea> put(
             @PathVariable("id") int id,
-            @RequestBody @Valid Idea idea
+            @RequestBody @Valid IdeaInputDto ideaInputDto,
+            Authentication authentication
     ) {
         return new ResponseEntity<>(
-                ideaService.update(id, idea),
+                ideaService.update(
+                        id,
+                        ideaInputDto,
+                        UUID.fromString(authentication.getName())
+                ),
                 HttpStatus.OK
         );
     }
@@ -93,12 +110,16 @@ public class IdeaController {
     /**
      * Удалить идею из системы
      *
-     * @param id Идентификатор идеи
+     * @param id             Идентификатор идеи
+     * @param authentication Объект Authentication
      * @return Тело ответа со статусом
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") int id) {
-        ideaService.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable("id") int id, Authentication authentication) {
+        ideaService.delete(
+                id,
+                UUID.fromString(authentication.getName())
+        );
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
