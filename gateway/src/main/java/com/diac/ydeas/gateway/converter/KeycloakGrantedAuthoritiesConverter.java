@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+import reactor.util.annotation.NonNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -42,7 +43,7 @@ public class KeycloakGrantedAuthoritiesConverter implements Converter<Jwt, Colle
      * @return Коллекция объектов GrantedAuthority
      */
     @Override
-    public Collection<GrantedAuthority> convert(Jwt jwt) {
+    public Collection<GrantedAuthority> convert(@NonNull Jwt jwt) {
         var realmRoles = realmRoles(jwt);
         Collection<GrantedAuthority> authorities = realmRoles.stream()
                 .map(SimpleGrantedAuthority::new)
@@ -69,6 +70,7 @@ public class KeycloakGrantedAuthoritiesConverter implements Converter<Jwt, Colle
      * @param jwt JWT-токен
      * @return Список, содержащий роли в формате строк
      */
+    @SuppressWarnings("unchecked")
     private List<String> realmRoles(Jwt jwt) {
         return Optional.ofNullable(jwt.getClaimAsMap(CLAIM_REALM_ACCESS))
                 .map(realmAccess -> (List<String>) realmAccess.get(ROLES))
