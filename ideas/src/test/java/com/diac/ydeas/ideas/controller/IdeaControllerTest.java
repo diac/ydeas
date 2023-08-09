@@ -2,6 +2,7 @@ package com.diac.ydeas.ideas.controller;
 
 import com.diac.ydeas.domain.exception.ResourceNotFoundException;
 import com.diac.ydeas.domain.model.Idea;
+import com.diac.ydeas.domain.model.IdeaInputDto;
 import com.diac.ydeas.ideas.service.IdeaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -15,10 +16,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.FilterChainProxy;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -32,6 +37,9 @@ public class IdeaControllerTest {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    private FilterChainProxy filterChainProxy;
 
     private MockMvc mockMvc;
 
@@ -51,7 +59,8 @@ public class IdeaControllerTest {
 
     @BeforeEach
     public void init() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .build();
     }
 
     @Test
@@ -92,12 +101,10 @@ public class IdeaControllerTest {
         int id = 1;
         String value = "test";
         UUID uuid = UUID.randomUUID();
+        Principal principal = Mockito.mock(Principal.class);
+        Mockito.when(principal.getName()).thenReturn(uuid.toString());
+        IdeaInputDto ideaInputDto = new IdeaInputDto(value, value);
         LocalDateTime now = LocalDateTime.now();
-        Idea newIdea = Idea.builder()
-                .title(value)
-                .description(value)
-                .authorUuid(uuid)
-                .build();
         Idea savedIdea = Idea.builder()
                 .id(id)
                 .title(value)
@@ -105,22 +112,23 @@ public class IdeaControllerTest {
                 .authorUuid(uuid)
                 .createdAt(now)
                 .build();
-        String requestBody = OBJECT_WRITER.writeValueAsString(newIdea);
+        String requestBody = OBJECT_WRITER.writeValueAsString(ideaInputDto);
         String responseBody = OBJECT_WRITER.writeValueAsString(savedIdea);
-        Mockito.when(ideaService.add(newIdea)).thenReturn(savedIdea);
-        mockMvc.perform(
-                        post(BASE_URL)
-                                .content(requestBody)
-                                .contentType(MediaType.APPLICATION_JSON)
-                ).andExpect(status().isCreated())
+        Mockito.when(ideaService.add(ideaInputDto, uuid)).thenReturn(savedIdea);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post(BASE_URL)
+                .principal(principal)
+                .content(requestBody)
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isCreated())
                 .andExpect(content().json(responseBody));
     }
 
     @Test
     public void whenPostWithNullValuesThenResponseStatusIsBadRequest() throws Exception {
-        Idea idea = Idea.builder()
-                .build();
-        String requestBody = OBJECT_WRITER.writeValueAsString(idea);
+        IdeaInputDto ideaInputDto = new IdeaInputDto();
+        String requestBody = OBJECT_WRITER.writeValueAsString(ideaInputDto);
         mockMvc.perform(
                 post(BASE_URL)
                         .content(requestBody)
@@ -130,13 +138,8 @@ public class IdeaControllerTest {
 
     @Test
     public void whenPostWithBlankValuesThenResponseStatusIsBadRequest() throws Exception {
-        UUID uuid = UUID.randomUUID();
-        Idea idea = Idea.builder()
-                .title("")
-                .description("")
-                .authorUuid(uuid)
-                .build();
-        String requestBody = OBJECT_WRITER.writeValueAsString(idea);
+        IdeaInputDto ideaInputDto = new IdeaInputDto("", "");
+        String requestBody = OBJECT_WRITER.writeValueAsString(ideaInputDto);
         mockMvc.perform(
                 post(BASE_URL)
                         .content(requestBody)
@@ -149,7 +152,10 @@ public class IdeaControllerTest {
         int id = 1;
         UUID uuid = UUID.randomUUID();
         String value = "test";
+        Principal principal = Mockito.mock(Principal.class);
+        Mockito.when(principal.getName()).thenReturn(uuid.toString());
         LocalDateTime now = LocalDateTime.now();
+        IdeaInputDto ideaInputDto = new IdeaInputDto(value, value);
         Idea idea = Idea.builder()
                 .id(id)
                 .title(value)
@@ -159,23 +165,23 @@ public class IdeaControllerTest {
                 .build();
         String jsonValue = OBJECT_WRITER.writeValueAsString(idea);
         String requestUrl = String.format("%s/%d", BASE_URL, id);
-        Mockito.when(ideaService.update(id, idea))
+        Mockito.when(ideaService.update(id, ideaInputDto, uuid))
                 .thenReturn(idea);
-        mockMvc.perform(
-                        put(requestUrl)
-                                .content(jsonValue)
-                                .contentType(MediaType.APPLICATION_JSON)
-                ).andExpect(status().isOk())
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .put(requestUrl)
+                .principal(principal)
+                .content(jsonValue)
+                .contentType(MediaType.APPLICATION_JSON);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk())
                 .andExpect(content().json(jsonValue));
     }
 
     @Test
     public void whenPutWithNullValuesThenResponseStatusIsBadRequest() throws Exception {
         int id = 1;
-        Idea idea = Idea.builder()
-                .id(id)
-                .build();
-        String jsonValue = OBJECT_WRITER.writeValueAsString(idea);
+        IdeaInputDto ideaInputDto = new IdeaInputDto();
+        String jsonValue = OBJECT_WRITER.writeValueAsString(ideaInputDto);
         String requestUrl = String.format("%s/%d", BASE_URL, id);
         mockMvc.perform(
                 put(requestUrl)
@@ -187,14 +193,8 @@ public class IdeaControllerTest {
     @Test
     public void whenPutWithBlankValuesThenResponseStatusIsBadRequest() throws Exception {
         int id = 1;
-        UUID uuid = UUID.randomUUID();
-        Idea idea = Idea.builder()
-                .id(id)
-                .title("")
-                .description("")
-                .authorUuid(uuid)
-                .build();
-        String jsonValue = OBJECT_WRITER.writeValueAsString(idea);
+        IdeaInputDto ideaInputDto = new IdeaInputDto("", "");
+        String jsonValue = OBJECT_WRITER.writeValueAsString(ideaInputDto);
         String requestUrl = String.format("%s/%d", BASE_URL, id);
         mockMvc.perform(
                 put(requestUrl)
@@ -206,8 +206,14 @@ public class IdeaControllerTest {
     @Test
     public void whenDelete() throws Exception {
         int id = 1;
+        UUID uuid = UUID.randomUUID();
         String requestUrl = String.format("%s/%d", BASE_URL, id);
-        mockMvc.perform(delete(requestUrl))
+        Principal principal = Mockito.mock(Principal.class);
+        Mockito.when(principal.getName()).thenReturn(uuid.toString());
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .delete(requestUrl)
+                .principal(principal);
+        mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk());
     }
 }
