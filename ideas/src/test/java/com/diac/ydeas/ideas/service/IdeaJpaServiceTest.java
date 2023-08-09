@@ -2,6 +2,7 @@ package com.diac.ydeas.ideas.service;
 
 import com.diac.ydeas.domain.exception.ResourceConstraintViolationException;
 import com.diac.ydeas.domain.exception.ResourceNotFoundException;
+import com.diac.ydeas.domain.exception.ResourceOwnershipViolationException;
 import com.diac.ydeas.domain.model.Idea;
 import com.diac.ydeas.domain.model.IdeaInputDto;
 import com.diac.ydeas.ideas.repository.IdeaRepository;
@@ -185,6 +186,22 @@ public class IdeaJpaServiceTest {
     }
 
     @Test
+    public void whenUpdateViolatesOwnershipThenThrowResourceOwnershipViolationException() {
+        int id = 1;
+        UUID authorUuid = UUID.randomUUID();
+        UUID strangerUuid = UUID.randomUUID();
+        Idea idea = Idea.builder()
+                .id(id)
+                .authorUuid(authorUuid)
+                .build();
+        IdeaInputDto ideaInputDto = new IdeaInputDto();
+        Mockito.when(ideaRepository.findById(id)).thenReturn(Optional.of(idea));
+        assertThatThrownBy(
+                () -> ideaService.update(id, ideaInputDto, strangerUuid)
+        ).isInstanceOf(ResourceOwnershipViolationException.class);
+    }
+
+    @Test
     public void whenDelete() {
         int id = 1;
         UUID uuid = UUID.randomUUID();
@@ -206,5 +223,20 @@ public class IdeaJpaServiceTest {
         assertThatThrownBy(
                 () -> ideaService.delete(id, uuid)
         ).isInstanceOf(ResourceNotFoundException.class);
+    }
+
+    @Test
+    public void whenDeleteViolatesOwnershipThenThrowResourceOwnershipViolationException() {
+        int id = 1;
+        UUID authorUuid = UUID.randomUUID();
+        UUID strangerUuid = UUID.randomUUID();
+        Idea idea = Idea.builder()
+                .id(id)
+                .authorUuid(authorUuid)
+                .build();
+        Mockito.when(ideaRepository.findById(id)).thenReturn(Optional.of(idea));
+        assertThatThrownBy(
+                () -> ideaService.delete(id, strangerUuid)
+        ).isInstanceOf(ResourceOwnershipViolationException.class);
     }
 }
