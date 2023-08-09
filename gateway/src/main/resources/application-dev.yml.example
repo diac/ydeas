@@ -14,14 +14,12 @@ spring:
           predicates:
             - Path=/ideas/**
           filters:
-            - AuthFilter
             - RewritePath=/ideas/(?<segment>.*), /$\{segment}
         - id: USERS
           uri: users_service_uri
           predicates:
             - Path=/users/**
           filters:
-            - AuthFilter
             - RewritePath=/users/(?<segment>.*), /$\{segment}
     security:
       oauth2:
