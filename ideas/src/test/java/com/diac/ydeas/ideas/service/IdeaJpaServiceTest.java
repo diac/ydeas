@@ -3,6 +3,7 @@ package com.diac.ydeas.ideas.service;
 import com.diac.ydeas.domain.exception.ResourceConstraintViolationException;
 import com.diac.ydeas.domain.exception.ResourceNotFoundException;
 import com.diac.ydeas.domain.model.Idea;
+import com.diac.ydeas.domain.model.IdeaInputDto;
 import com.diac.ydeas.ideas.repository.IdeaRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,10 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -88,37 +91,49 @@ public class IdeaJpaServiceTest {
     @Test
     public void whenAdd() {
         int id = 1;
-        Idea idea = Idea.builder()
-                .id(id)
+        UUID uuid = UUID.randomUUID();
+        LocalDateTime now = LocalDateTime.now();
+        IdeaInputDto ideaInputDto = new IdeaInputDto();
+        Idea newIdea = Idea.builder()
+                .authorUuid(uuid)
+                .createdAt(now)
                 .build();
-        Mockito.when(ideaRepository.save(idea)).thenReturn(idea);
-        Idea savedIdea = ideaService.add(idea);
-        Mockito.verify(ideaRepository).save(idea);
-        assertThat(savedIdea).isEqualTo(idea);
+        Idea expectedIdea = Idea.builder()
+                .id(id)
+                .authorUuid(uuid)
+                .createdAt(now)
+                .build();
+        Mockito.when(ideaRepository.save(newIdea)).thenReturn(expectedIdea);
+        Idea ideaInDb = ideaService.add(ideaInputDto, uuid);
+        Mockito.verify(ideaRepository).save(newIdea);
+        assertThat(ideaInDb).isEqualTo(expectedIdea);
     }
 
     @Test
     public void whenAddViolatesConstraintsThenThrowException() {
-        int id = 1;
+        UUID uuid = UUID.randomUUID();
         Idea idea = Idea.builder()
-                .id(id)
                 .build();
+        IdeaInputDto ideaInputDto = new IdeaInputDto();
         Mockito.when(ideaRepository.save(idea))
                 .thenThrow(ConstraintViolationException.class);
         assertThatThrownBy(
-                () -> ideaService.add(idea)
+                () -> ideaService.add(ideaInputDto, uuid)
         ).isInstanceOf(ResourceConstraintViolationException.class);
     }
 
     @Test
     public void whenUpdate() {
         int id = 1;
+        UUID uuid = UUID.randomUUID();
         Idea idea = Idea.builder()
                 .id(id)
+                .authorUuid(uuid)
                 .build();
+        IdeaInputDto ideaInputDto = new IdeaInputDto();
         Mockito.when(ideaRepository.findById(id)).thenReturn(Optional.of(idea));
         Mockito.when(ideaRepository.save(idea)).thenReturn(idea);
-        Idea updatedIdea = ideaService.update(id, idea);
+        Idea updatedIdea = ideaService.update(id, ideaInputDto, uuid);
         Mockito.verify(ideaRepository).findById(id);
         Mockito.verify(ideaRepository).save(idea);
         assertThat(idea).isEqualTo(updatedIdea);
@@ -127,51 +142,58 @@ public class IdeaJpaServiceTest {
     @Test
     public void whenUpdateNonExistentThenThrowException() {
         int id = 1;
-        Idea idea = Idea.builder()
-                .id(id)
-                .build();
+        UUID uuid = UUID.randomUUID();
+        IdeaInputDto ideaInputDto = new IdeaInputDto();
         Mockito.when(ideaRepository.findById(id)).thenReturn(Optional.empty());
         assertThatThrownBy(
-                () -> ideaService.update(id, idea)
+                () -> ideaService.update(id, ideaInputDto, uuid)
         ).isInstanceOf(ResourceNotFoundException.class);
     }
 
     @Test
     public void whenUpdateViolatesDataIntegrityThenThrowException() {
         int id = 1;
+        UUID uuid = UUID.randomUUID();
         Idea idea = Idea.builder()
                 .id(id)
+                .authorUuid(uuid)
                 .build();
+        IdeaInputDto ideaInputDto = new IdeaInputDto();
         Mockito.when(ideaRepository.findById(id)).thenReturn(Optional.of(idea));
         Mockito.when(ideaRepository.save(idea))
                 .thenThrow(DataIntegrityViolationException.class);
         assertThatThrownBy(
-                () -> ideaService.update(id, idea)
+                () -> ideaService.update(id, ideaInputDto, uuid)
         ).isInstanceOf(ResourceConstraintViolationException.class);
     }
 
     @Test
     public void whenUpdateViolatesConstraintsThenThrowException() {
         int id = 1;
+        UUID uuid = UUID.randomUUID();
         Idea idea = Idea.builder()
                 .id(id)
+                .authorUuid(uuid)
                 .build();
+        IdeaInputDto ideaInputDto = new IdeaInputDto();
         Mockito.when(ideaRepository.findById(id)).thenReturn(Optional.of(idea));
         Mockito.when(ideaRepository.save(idea))
                 .thenThrow(ConstraintViolationException.class);
         assertThatThrownBy(
-                () -> ideaService.update(id, idea)
+                () -> ideaService.update(id, ideaInputDto, uuid)
         ).isInstanceOf(ResourceConstraintViolationException.class);
     }
 
     @Test
     public void whenDelete() {
         int id = 1;
+        UUID uuid = UUID.randomUUID();
         Idea idea = Idea.builder()
                 .id(id)
+                .authorUuid(uuid)
                 .build();
         Mockito.when(ideaRepository.findById(id)).thenReturn(Optional.of(idea));
-        ideaService.delete(id);
+        ideaService.delete(id, uuid);
         Mockito.verify(ideaRepository).findById(id);
         Mockito.verify(ideaRepository).deleteById(id);
     }
@@ -179,9 +201,10 @@ public class IdeaJpaServiceTest {
     @Test
     public void whenDeleteNonExistentThenThrowException() {
         int id = 1;
+        UUID uuid = UUID.randomUUID();
         Mockito.when(ideaRepository.findById(id)).thenReturn(Optional.empty());
         assertThatThrownBy(
-                () -> ideaService.delete(id)
+                () -> ideaService.delete(id, uuid)
         ).isInstanceOf(ResourceNotFoundException.class);
     }
 }
