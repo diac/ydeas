@@ -1,10 +1,12 @@
 package com.diac.ydeas.ideas.service;
 
 import com.diac.ydeas.domain.model.Idea;
+import com.diac.ydeas.domain.model.IdeaInputDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Сервис для работы с объектами Idea
@@ -37,24 +39,27 @@ public interface IdeaService {
     /**
      * Добавить новую идею в систему
      *
-     * @param idea Новая идея
+     * @param ideaInputDto DTO с данными новой идеи
+     * @param authorUuid   UUID автора идеи
      * @return Сохраненная идея
      */
-    Idea add(Idea idea);
+    Idea add(IdeaInputDto ideaInputDto, UUID authorUuid);
 
     /**
      * Обновить данные идеи в системе
      *
-     * @param id   Идентификатор идеи, данные которой необходимо обновить
-     * @param idea Объект с обновленными данными идеи
+     * @param id           Идентификатор идеи, данные которой необходимо обновить
+     * @param ideaInputDto DTO с обновленными данными идеи
+     * @param authorUuid   UUID автора идеи
      * @return Обновленная идея
      */
-    Idea update(int id, Idea idea);
+    Idea update(int id, IdeaInputDto ideaInputDto, UUID authorUuid);
 
     /**
      * Удалить идею из системы
      *
-     * @param id Идентификатор идеи, которую необходимо удалить
+     * @param id         Идентификатор идеи, которую необходимо удалить
+     * @param authorUuid UUID автора идеи
      */
-    void delete(int id);
+    void delete(int id, UUID authorUuid);
 }

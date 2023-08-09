@@ -2,7 +2,9 @@ package com.diac.ydeas.ideas.service;
 
 import com.diac.ydeas.domain.exception.ResourceConstraintViolationException;
 import com.diac.ydeas.domain.exception.ResourceNotFoundException;
+import com.diac.ydeas.domain.exception.ResourceOwnershipViolationException;
 import com.diac.ydeas.domain.model.Idea;
+import com.diac.ydeas.domain.model.IdeaInputDto;
 import com.diac.ydeas.ideas.repository.IdeaRepository;
 import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Сервис для работы с объектами Idea
@@ -21,7 +25,15 @@ import java.util.List;
 @AllArgsConstructor
 public class IdeaJpaService implements IdeaService {
 
+    /**
+     * Шаблон сообщения о том, что идея не найдена
+     */
     private static final String IDEA_DOES_NOT_EXIST_MESSAGE = "Idea #%s does not exist";
+
+    /**
+     * Шаблон сообщения о нарушении прав доступа к идее
+     */
+    private static final String IDEA_OWNERSHIP_VIOLATION_MESSAGE = "You don't have permission to modify this idea (#%s)";
 
     /**
      * Репозиторий для хранения объектов Idea
@@ -67,14 +79,20 @@ public class IdeaJpaService implements IdeaService {
     /**
      * Добавить новую идею в систему
      *
-     * @param idea Новая идея
+     * @param ideaInputDto DTO с данными новой идеи
+     * @param authorUuid   UUID автора идеи
      * @return Сохраненная идея
      * @throws ResourceConstraintViolationException в случае, если при обращении к ресурсу нарушаются наложенные на него ограничения
      */
     @Override
-    public Idea add(Idea idea) {
+    public Idea add(IdeaInputDto ideaInputDto, UUID authorUuid) {
         try {
-            idea.setCreatedAt(LocalDateTime.now());
+            Idea idea = Idea.builder()
+                    .title(ideaInputDto.getTitle())
+                    .description(ideaInputDto.getDescription())
+                    .createdAt(LocalDateTime.now())
+                    .authorUuid(authorUuid)
+                    .build();
             return ideaRepository.save(idea);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new ResourceConstraintViolationException(e.getMessage());
@@ -84,21 +102,29 @@ public class IdeaJpaService implements IdeaService {
     /**
      * Обновить данные идеи в системе
      *
-     * @param id   Идентификатор идеи, данные которой необходимо обновить
-     * @param idea Объект с обновленными данными идеи
+     * @param id           Идентификатор идеи, данные которой необходимо обновить
+     * @param ideaInputDto DTO с обновленными данными идеи
+     * @param authorUuid   UUID автора идеи
      * @return Обновленная идея
      * @throws ResourceConstraintViolationException в случае, если при обращении к ресурсу нарушаются наложенные на него ограничения
+     * @throws ResourceOwnershipViolationException  при нарушении прав доступа к ресурсу
      */
     @Override
-    public Idea update(int id, Idea idea) {
+    public Idea update(int id, IdeaInputDto ideaInputDto, UUID authorUuid) {
         try {
-            return ideaRepository.findById(id)
-                    .map(ideaInDb -> {
-                        idea.setId(id);
-                        return ideaRepository.save(idea);
-                    }).orElseThrow(
-                            () -> new ResourceNotFoundException(String.format(IDEA_DOES_NOT_EXIST_MESSAGE, id))
-                    );
+            Optional<Idea> ideaOptional = ideaRepository.findById(id);
+            if (ideaOptional.isEmpty()) {
+                throw new ResourceNotFoundException(String.format(IDEA_DOES_NOT_EXIST_MESSAGE, id));
+            }
+            Idea idea = ideaOptional.get();
+            if (!idea.getAuthorUuid().equals(authorUuid)) {
+                throw new ResourceOwnershipViolationException(
+                        String.format(IDEA_OWNERSHIP_VIOLATION_MESSAGE, id)
+                );
+            }
+            idea.setTitle(ideaInputDto.getTitle());
+            idea.setDescription(ideaInputDto.getDescription());
+            return ideaRepository.save(idea);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new ResourceConstraintViolationException(e.getMessage());
         }
@@ -107,19 +133,23 @@ public class IdeaJpaService implements IdeaService {
     /**
      * Удалить идею из системы
      *
-     * @param id Идентификатор идеи, которую необходимо удалить
-     * @throws ResourceNotFoundException При попытке удалить несуществующую идею
+     * @param id         Идентификатор идеи, которую необходимо удалить
+     * @param authorUuid UUID автора идеи
+     * @throws ResourceNotFoundException           При попытке удалить несуществующую идею
+     * @throws ResourceOwnershipViolationException при нарушении прав доступа к ресурсу
      */
     @Override
-    public void delete(int id) {
-        ideaRepository.findById(id)
-                .ifPresentOrElse(
-                        idea -> ideaRepository.deleteById(id),
-                        () -> {
-                            throw new ResourceNotFoundException(
-                                    String.format(IDEA_DOES_NOT_EXIST_MESSAGE, id)
-                            );
-                        }
-                );
+    public void delete(int id, UUID authorUuid) {
+        Optional<Idea> ideaOptional = ideaRepository.findById(id);
+        if (ideaOptional.isEmpty()) {
+            throw new ResourceNotFoundException(String.format(IDEA_DOES_NOT_EXIST_MESSAGE, id));
+        }
+        Idea idea = ideaOptional.get();
+        if (!idea.getAuthorUuid().equals(authorUuid)) {
+            throw new ResourceOwnershipViolationException(
+                    String.format(IDEA_OWNERSHIP_VIOLATION_MESSAGE, id)
+            );
+        }
+        ideaRepository.deleteById(id);
     }
 }
