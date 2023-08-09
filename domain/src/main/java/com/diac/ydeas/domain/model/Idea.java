@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Модель данных "Идея"
@@ -45,9 +45,9 @@ public class Idea {
     /**
      * Автор идеи
      */
-    @NotNull(message = "Idea author ID is required")
-    @Column(name = "author_user_id")
-    private Integer authorUserId;
+    @NotNull(message = "Idea author UUID is required")
+    @Column(name = "author_uuid")
+    private UUID authorUuid;
 
     /**
      * Дата и время создания идеи

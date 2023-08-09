@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -90,17 +91,18 @@ public class IdeaControllerTest {
     public void whenPost() throws Exception {
         int id = 1;
         String value = "test";
+        UUID uuid = UUID.randomUUID();
         LocalDateTime now = LocalDateTime.now();
         Idea newIdea = Idea.builder()
                 .title(value)
                 .description(value)
-                .authorUserId(id)
+                .authorUuid(uuid)
                 .build();
         Idea savedIdea = Idea.builder()
                 .id(id)
                 .title(value)
                 .description(value)
-                .authorUserId(id)
+                .authorUuid(uuid)
                 .createdAt(now)
                 .build();
         String requestBody = OBJECT_WRITER.writeValueAsString(newIdea);
@@ -128,11 +130,11 @@ public class IdeaControllerTest {
 
     @Test
     public void whenPostWithBlankValuesThenResponseStatusIsBadRequest() throws Exception {
-        int id = 1;
+        UUID uuid = UUID.randomUUID();
         Idea idea = Idea.builder()
                 .title("")
                 .description("")
-                .authorUserId(id)
+                .authorUuid(uuid)
                 .build();
         String requestBody = OBJECT_WRITER.writeValueAsString(idea);
         mockMvc.perform(
@@ -145,13 +147,14 @@ public class IdeaControllerTest {
     @Test
     public void whenPut() throws Exception {
         int id = 1;
+        UUID uuid = UUID.randomUUID();
         String value = "test";
         LocalDateTime now = LocalDateTime.now();
         Idea idea = Idea.builder()
                 .id(id)
                 .title(value)
                 .description(value)
-                .authorUserId(id)
+                .authorUuid(uuid)
                 .createdAt(now)
                 .build();
         String jsonValue = OBJECT_WRITER.writeValueAsString(idea);
@@ -184,11 +187,12 @@ public class IdeaControllerTest {
     @Test
     public void whenPutWithBlankValuesThenResponseStatusIsBadRequest() throws Exception {
         int id = 1;
+        UUID uuid = UUID.randomUUID();
         Idea idea = Idea.builder()
                 .id(id)
                 .title("")
                 .description("")
-                .authorUserId(id)
+                .authorUuid(uuid)
                 .build();
         String jsonValue = OBJECT_WRITER.writeValueAsString(idea);
         String requestUrl = String.format("%s/%d", BASE_URL, id);

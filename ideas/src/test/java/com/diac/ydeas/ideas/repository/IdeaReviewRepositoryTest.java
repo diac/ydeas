@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,12 +18,12 @@ public class IdeaReviewRepositoryTest extends AbstractRepositoryIntegrationTest 
     private static final Idea IDEA_TEMPLATE;
 
     static {
-        int number = 1;
         String value = String.valueOf(System.currentTimeMillis());
+        UUID uuid = UUID.randomUUID();
         IDEA_TEMPLATE = Idea.builder()
                 .title(value)
                 .description(value)
-                .authorUserId(number)
+                .authorUuid(uuid)
                 .createdAt(LocalDateTime.now())
                 .build();
     }

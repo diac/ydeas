@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,13 +16,13 @@ public class IdeaRepositoryTest extends AbstractRepositoryIntegrationTest {
 
     @Test
     public void whenFindAll() {
-        int number = 1;
         String value = String.valueOf(System.currentTimeMillis());
+        UUID uuid = UUID.randomUUID();
         Idea idea = ideaRepository.save(
                 Idea.builder()
                         .title(value)
                         .description(value)
-                        .authorUserId(number)
+                        .authorUuid(uuid)
                         .createdAt(LocalDateTime.now())
                         .build()
         );
@@ -30,13 +31,13 @@ public class IdeaRepositoryTest extends AbstractRepositoryIntegrationTest {
 
     @Test
     public void whenFindById() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         String value = String.valueOf(System.currentTimeMillis());
         Idea idea = ideaRepository.save(
                 Idea.builder()
                 .title(value)
                 .description(value)
-                .authorUserId(number)
+                .authorUuid(uuid)
                 .createdAt(LocalDateTime.now())
                 .build()
         );
@@ -47,30 +48,30 @@ public class IdeaRepositoryTest extends AbstractRepositoryIntegrationTest {
 
     @Test
     public void whenAdd() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         String value = String.valueOf(System.currentTimeMillis());
         Idea idea = ideaRepository.save(
                 Idea.builder()
                         .title(value)
                         .description(value)
-                        .authorUserId(number)
+                        .authorUuid(uuid)
                         .createdAt(LocalDateTime.now())
                         .build()
         );
         assertThat(value).isEqualTo(idea.getTitle());
         assertThat(value).isEqualTo(idea.getDescription());
-        assertThat(number).isEqualTo(idea.getAuthorUserId());
+        assertThat(uuid).isEqualTo(idea.getAuthorUuid());
     }
 
     @Test
     public void whenUpdate() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         String value = String.valueOf(System.currentTimeMillis());
         Idea idea = ideaRepository.save(
                 Idea.builder()
                         .title(value)
                         .description(value)
-                        .authorUserId(number)
+                        .authorUuid(uuid)
                         .createdAt(LocalDateTime.now())
                         .build()
         );
@@ -84,13 +85,13 @@ public class IdeaRepositoryTest extends AbstractRepositoryIntegrationTest {
 
     @Test
     public void whenDelete() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         String value = String.valueOf(System.currentTimeMillis());
         Idea idea = ideaRepository.save(
                 Idea.builder()
                         .title(value)
                         .description(value)
-                        .authorUserId(number)
+                        .authorUuid(uuid)
                         .createdAt(LocalDateTime.now())
                         .build()
         );

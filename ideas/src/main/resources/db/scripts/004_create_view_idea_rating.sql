@@ -4,7 +4,7 @@ AS
 SELECT
     Idea.idea_id AS idea_id,
     Idea.idea_title AS idea_title,
-    Idea.idea_author_user_id AS idea_author_user_id,
+    Idea.idea_author_uuid AS idea_author_uuid,
     Idea.idea_created_at AS idea_created_at,
     Idea.likes AS likes,
     Idea.dislikes AS dislikes,
@@ -15,7 +15,7 @@ FROM
     SELECT
         Idea.id AS idea_id,
         Idea.title AS idea_title,
-        Idea.author_user_id AS idea_author_user_id,
+        Idea.author_uuid AS idea_author_uuid,
         Idea.created_at AS idea_created_at,
         SUM(
             CASE WHEN IdeaRate.rate = 'LIKE' THEN 1 ELSE 0 END

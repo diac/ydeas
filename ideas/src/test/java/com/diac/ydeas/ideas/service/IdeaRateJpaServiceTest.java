@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -33,11 +34,12 @@ public class IdeaRateJpaServiceTest {
     static {
         int number = 1;
         String value = String.valueOf(System.currentTimeMillis());
+        UUID uuid = UUID.randomUUID();
         IDEA_TEMPLATE = Idea.builder()
                 .id(number)
                 .title(value)
                 .description(value)
-                .authorUserId(number)
+                .authorUuid(uuid)
                 .createdAt(LocalDateTime.now())
                 .build();
     }
