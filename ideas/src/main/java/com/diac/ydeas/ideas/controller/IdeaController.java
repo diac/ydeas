@@ -1,7 +1,7 @@
 package com.diac.ydeas.ideas.controller;
 
 import com.diac.ydeas.domain.model.Idea;
-import com.diac.ydeas.domain.model.IdeaInputDto;
+import com.diac.ydeas.domain.dto.IdeaInputDto;
 import com.diac.ydeas.ideas.service.IdeaService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;

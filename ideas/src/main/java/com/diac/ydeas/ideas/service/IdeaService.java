@@ -1,7 +1,7 @@
 package com.diac.ydeas.ideas.service;
 
 import com.diac.ydeas.domain.model.Idea;
-import com.diac.ydeas.domain.model.IdeaInputDto;
+import com.diac.ydeas.domain.dto.IdeaInputDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 

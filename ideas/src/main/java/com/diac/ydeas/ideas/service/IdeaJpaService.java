@@ -4,7 +4,7 @@ import com.diac.ydeas.domain.exception.ResourceConstraintViolationException;
 import com.diac.ydeas.domain.exception.ResourceNotFoundException;
 import com.diac.ydeas.domain.exception.ResourceOwnershipViolationException;
 import com.diac.ydeas.domain.model.Idea;
-import com.diac.ydeas.domain.model.IdeaInputDto;
+import com.diac.ydeas.domain.dto.IdeaInputDto;
 import com.diac.ydeas.ideas.repository.IdeaRepository;
 import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;

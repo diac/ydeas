@@ -2,7 +2,7 @@ package com.diac.ydeas.ideas.controller;
 
 import com.diac.ydeas.domain.exception.ResourceNotFoundException;
 import com.diac.ydeas.domain.model.Idea;
-import com.diac.ydeas.domain.model.IdeaInputDto;
+import com.diac.ydeas.domain.dto.IdeaInputDto;
 import com.diac.ydeas.ideas.service.IdeaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;

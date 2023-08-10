@@ -1,4 +1,4 @@
-package com.diac.ydeas.domain.model;
+package com.diac.ydeas.domain.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
