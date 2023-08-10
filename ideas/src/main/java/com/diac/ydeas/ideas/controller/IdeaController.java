@@ -43,7 +43,7 @@ public class IdeaController {
             @RequestParam(name = "page", required = false, defaultValue = "1") int pageNumber
     ) {
         return new ResponseEntity<>(
-                ideaService.getPage(PageRequest.of(pageNumber, IDEAS_PER_PAGE)),
+                ideaService.getPage(PageRequest.of(pageNumber - 1, IDEAS_PER_PAGE)),
                 HttpStatus.OK
         );
     }
