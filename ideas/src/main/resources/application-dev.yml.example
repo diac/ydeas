@@ -13,3 +13,5 @@ eureka:
   client:
     service-url:
       defaultZone: eureka-default-zone-url
+#noinspection undefined
+files-service-url: lb://FILES
