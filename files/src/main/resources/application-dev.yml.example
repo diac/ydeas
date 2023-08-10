@@ -1,0 +1,21 @@
+server:
+  port: port_number
+spring:
+  application:
+    name: FILES
+eureka:
+  client:
+    service-url:
+      defaultZone: eureka-default-zone-url
+# noinspection undefined
+s3:
+  host:
+    name: s3_host_name
+  region:
+    name: s3_region_name
+  bucket:
+    name: s3_bucket_name
+  access:
+    key:
+      id: access_key_id
+      secret: access_key_secret

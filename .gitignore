@@ -46,3 +46,5 @@ build/
 /gateway/src/main/resources/application-dev.yml
 /users/src/main/resources/application.yml
 /users/src/main/resources/application-dev.yml
+/files/src/main/resources/application.yml
+/files/src/main/resources/application-dev.yml
