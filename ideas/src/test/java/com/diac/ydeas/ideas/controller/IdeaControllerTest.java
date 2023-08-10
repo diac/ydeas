@@ -103,7 +103,10 @@ public class IdeaControllerTest {
         UUID uuid = UUID.randomUUID();
         Principal principal = Mockito.mock(Principal.class);
         Mockito.when(principal.getName()).thenReturn(uuid.toString());
-        IdeaInputDto ideaInputDto = new IdeaInputDto(value, value);
+        IdeaInputDto ideaInputDto = IdeaInputDto.builder()
+                .title(value)
+                .description(value)
+                .build();
         LocalDateTime now = LocalDateTime.now();
         Idea savedIdea = Idea.builder()
                 .id(id)
@@ -138,7 +141,10 @@ public class IdeaControllerTest {
 
     @Test
     public void whenPostWithBlankValuesThenResponseStatusIsBadRequest() throws Exception {
-        IdeaInputDto ideaInputDto = new IdeaInputDto("", "");
+        IdeaInputDto ideaInputDto = IdeaInputDto.builder()
+                .title("")
+                .description("")
+                .build();
         String requestBody = OBJECT_WRITER.writeValueAsString(ideaInputDto);
         mockMvc.perform(
                 post(BASE_URL)
@@ -155,7 +161,10 @@ public class IdeaControllerTest {
         Principal principal = Mockito.mock(Principal.class);
         Mockito.when(principal.getName()).thenReturn(uuid.toString());
         LocalDateTime now = LocalDateTime.now();
-        IdeaInputDto ideaInputDto = new IdeaInputDto(value, value);
+        IdeaInputDto ideaInputDto = IdeaInputDto.builder()
+                .title(value)
+                .description(value)
+                .build();
         Idea idea = Idea.builder()
                 .id(id)
                 .title(value)
@@ -193,7 +202,10 @@ public class IdeaControllerTest {
     @Test
     public void whenPutWithBlankValuesThenResponseStatusIsBadRequest() throws Exception {
         int id = 1;
-        IdeaInputDto ideaInputDto = new IdeaInputDto("", "");
+        IdeaInputDto ideaInputDto = IdeaInputDto.builder()
+                .title("")
+                .description("")
+                .build();
         String jsonValue = OBJECT_WRITER.writeValueAsString(ideaInputDto);
         String requestUrl = String.format("%s/%d", BASE_URL, id);
         mockMvc.perform(
