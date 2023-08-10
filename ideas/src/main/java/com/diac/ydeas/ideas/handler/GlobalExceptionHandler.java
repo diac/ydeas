@@ -7,7 +7,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -105,6 +108,32 @@ public class GlobalExceptionHandler {
                         put("type", e.getClass());
                     }
                 }
+        ));
+    }
+
+    /**
+     * Метод-обработчик исключений BindException
+     *
+     * @param e             Объект-исключение
+     * @param bindingResult Объект BindingResult
+     * @param response      Объект HttpServletResponse
+     */
+    @ExceptionHandler(
+            value = {
+                    BindException.class
+            }
+    )
+    public void handleValidationBindException(
+            Exception e,
+            BindingResult bindingResult,
+            HttpServletResponse response
+    ) throws IOException {
+        log.warn(e.getMessage(), e);
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        response.setContentType("application/json");
+        response.getWriter().write(objectMapper.writeValueAsString(
+                bindingResult.getFieldErrors().stream()
+                        .map(DefaultMessageSourceResolvable::getDefaultMessage)
         ));
     }
 }
