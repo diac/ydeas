@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -91,6 +92,7 @@ public class IdeaJpaService implements IdeaService {
                     .title(ideaInputDto.getTitle())
                     .description(ideaInputDto.getDescription())
                     .createdAt(LocalDateTime.now())
+                    .attachments(new HashSet<>())
                     .authorUuid(authorUuid)
                     .build();
             return ideaRepository.save(idea);

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -62,5 +63,5 @@ public class Idea {
             joinColumns = {@JoinColumn(name = "idea_id")},
             inverseJoinColumns = {@JoinColumn(name = "media_object_id")}
     )
-    private Set<MediaObject> attachments;
+    private Set<MediaObject> attachments = new HashSet<>();
 }
