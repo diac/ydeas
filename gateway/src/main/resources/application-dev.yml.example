@@ -21,6 +21,12 @@ spring:
             - Path=/users/**
           filters:
             - RewritePath=/users/(?<segment>.*), /$\{segment}
+        - id: FILES
+          uri: files_service_uir
+          predicates:
+            - Path=/files/**
+          filters:
+            - RewritePath=/files/(?<segment>.*), /$\{segment}
     security:
       oauth2:
         resourceserver:
