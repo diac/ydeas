@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -54,4 +55,12 @@ public class Idea {
      */
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @ManyToMany
+    @JoinTable(
+            name = "idea_attachment",
+            joinColumns = {@JoinColumn(name = "idea_id")},
+            inverseJoinColumns = {@JoinColumn(name = "media_object_id")}
+    )
+    private Set<MediaObject> attachments;
 }
