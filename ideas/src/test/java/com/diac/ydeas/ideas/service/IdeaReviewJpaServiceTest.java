@@ -7,6 +7,7 @@ import com.diac.ydeas.domain.model.Idea;
 import com.diac.ydeas.domain.model.IdeaReview;
 import com.diac.ydeas.ideas.repository.IdeaReviewRepository;
 import jakarta.validation.ConstraintViolationException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,9 @@ public class IdeaReviewJpaServiceTest {
     @MockBean
     private IdeaReviewRepository ideaReviewRepository;
 
+    @MockBean
+    private IdeaService ideaService;
+
     @Test
     public void whenFindAll() {
         List<IdeaReview> expectedIdeaReviews = List.of(
@@ -79,18 +83,18 @@ public class IdeaReviewJpaServiceTest {
     }
 
     @Test
-    public void whenFindAllByReviewerUserId() {
-        int reviewerUserId = 1;
+    public void whenFindAllByReviewerUserUuid() {
+        UUID uuid = UUID.randomUUID();
         List<IdeaReview> expectedIdeaReviews = List.of(
                 IdeaReview.builder()
                         .idea(IDEA_TEMPLATE)
-                        .reviewerUserId(reviewerUserId)
+                        .reviewerUserUuid(uuid)
                         .build()
         );
-        Mockito.when(ideaReviewRepository.findAllByReviewerUserId(reviewerUserId)).thenReturn(expectedIdeaReviews);
-        List<IdeaReview> ideaReviews = ideaReviewService.findAllByReviewerUserId(reviewerUserId);
+        Mockito.when(ideaReviewRepository.findAllByReviewerUserUuid(uuid)).thenReturn(expectedIdeaReviews);
+        List<IdeaReview> ideaReviews = ideaReviewService.findAllByReviewerUserUuid(uuid);
         assertThat(ideaReviews).isEqualTo(expectedIdeaReviews);
-        Mockito.verify(ideaReviewRepository).findAllByReviewerUserId(reviewerUserId);
+        Mockito.verify(ideaReviewRepository).findAllByReviewerUserUuid(uuid);
     }
 
     @Test
@@ -224,5 +228,45 @@ public class IdeaReviewJpaServiceTest {
         assertThatThrownBy(
                 () -> ideaReviewService.delete(ideaId)
         ).isInstanceOf(ResourceNotFoundException.class);
+    }
+
+    @Test
+    public void whenApprove() {
+        int id = 1;
+        UUID uuid = UUID.randomUUID();
+        Idea idea = Idea.builder()
+                .id(id)
+                .build();
+        IdeaReview ideaReview = IdeaReview.builder()
+                .ideaId(id)
+                .idea(idea)
+                .reviewerUserUuid(uuid)
+                .ideaStatus(IdeaStatus.APPROVED)
+                .build();
+        Mockito.when(ideaService.findById(id)).thenReturn(idea);
+        Assertions.assertAll(
+                () -> ideaReviewService.approve(id, uuid)
+        );
+        Mockito.verify(ideaReviewRepository).save(ideaReview);
+    }
+
+    @Test
+    public void whenDecline() {
+        int id = 1;
+        UUID uuid = UUID.randomUUID();
+        Idea idea = Idea.builder()
+                .id(id)
+                .build();
+        IdeaReview ideaReview = IdeaReview.builder()
+                .ideaId(id)
+                .idea(idea)
+                .reviewerUserUuid(uuid)
+                .ideaStatus(IdeaStatus.DECLINED)
+                .build();
+        Mockito.when(ideaService.findById(id)).thenReturn(idea);
+        Assertions.assertAll(
+                () -> ideaReviewService.decline(id, uuid)
+        );
+        Mockito.verify(ideaReviewRepository).save(ideaReview);
     }
 }

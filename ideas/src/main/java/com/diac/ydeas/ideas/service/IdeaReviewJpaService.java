@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Сервис для работы с объектами IdeaReview
@@ -26,6 +27,11 @@ public class IdeaReviewJpaService implements IdeaReviewService {
      * Шаблон сообщения о том, что рассмотрение идеи не существует
      */
     private static final String IDEA_REVIEW_DOES_NOT_EXIST_MESSAGE = "Idea review #%s does not exist";
+
+    /**
+     * Сервис для работы с объектами Idea
+     */
+    private final IdeaService ideaService;
 
     /**
      * Репозиторий для хранения объектов IdeaReview
@@ -56,12 +62,12 @@ public class IdeaReviewJpaService implements IdeaReviewService {
     /**
      * Найти все рассмотрения по ID пользователя
      *
-     * @param reviewerUserId Идентификатор пользователя-эксперта
+     * @param reviewerUserUuid UUID пользователя-эксперта
      * @return Список с рассмотрениями идеи
      */
     @Override
-    public List<IdeaReview> findAllByReviewerUserId(int reviewerUserId) {
-        return ideaReviewRepository.findAllByReviewerUserId(reviewerUserId);
+    public List<IdeaReview> findAllByReviewerUserUuid(UUID reviewerUserUuid) {
+        return ideaReviewRepository.findAllByReviewerUserUuid(reviewerUserUuid);
     }
 
     /**
@@ -151,5 +157,41 @@ public class IdeaReviewJpaService implements IdeaReviewService {
                             );
                         }
                 );
+    }
+
+    /**
+     * Одобрить идею
+     *
+     * @param ideaId   Идентификатор идеи
+     * @param reviewerUserUuid UUID пользователя-эксперта
+     */
+    @Override
+    public void approve(int ideaId, UUID reviewerUserUuid) {
+        Idea idea = ideaService.findById(ideaId);
+        IdeaReview ideaReview = IdeaReview.builder()
+                .ideaId(ideaId)
+                .idea(idea)
+                .reviewerUserUuid(reviewerUserUuid)
+                .ideaStatus(IdeaStatus.APPROVED)
+                .build();
+        ideaReviewRepository.save(ideaReview);
+    }
+
+    /**
+     * Отклонить идею
+     *
+     * @param ideaId   Идентификатор идеи
+     * @param reviewerUserUuid UUID пользователя-эксперта
+     */
+    @Override
+    public void decline(int ideaId, UUID reviewerUserUuid) {
+        Idea idea = ideaService.findById(ideaId);
+        IdeaReview ideaReview = IdeaReview.builder()
+                .ideaId(ideaId)
+                .idea(idea)
+                .reviewerUserUuid(reviewerUserUuid)
+                .ideaStatus(IdeaStatus.DECLINED)
+                .build();
+        ideaReviewRepository.save(ideaReview);
     }
 }

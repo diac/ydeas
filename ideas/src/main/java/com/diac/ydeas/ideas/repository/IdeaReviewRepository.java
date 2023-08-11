@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Репозиторий для хранения объектов IdeaReview (Рассмотрение идеи)
@@ -16,10 +17,10 @@ public interface IdeaReviewRepository extends JpaRepository<IdeaReview, Integer>
     /**
      * Найти все рассмотрения по ID пользователя
      *
-     * @param reviewerUserId Идентификатор пользователя-эксперта
+     * @param reviewerUserUuid UUID пользователя-эксперта
      * @return Список с рассмотрениями идеи
      */
-    List<IdeaReview> findAllByReviewerUserId(int reviewerUserId);
+    List<IdeaReview> findAllByReviewerUserUuid(UUID reviewerUserUuid);
 
     /**
      * Найти все рассмотрения по статусу идеи

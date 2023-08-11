@@ -1,16 +1,16 @@
 package com.diac.ydeas.ideas.controller;
 
-import com.diac.ydeas.domain.enumeration.IdeaStatus;
-import com.diac.ydeas.domain.model.Idea;
-import com.diac.ydeas.domain.model.IdeaReview;
 import com.diac.ydeas.ideas.service.IdeaReviewService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.security.Principal;
+import java.util.UUID;
 
 /**
  * Контроллер, реализующий доступ к объектам модели IdeaReview
@@ -28,50 +28,32 @@ public class IdeaReviewController {
     /**
      * Одобрить идею
      *
-     * @param ideaId         Идентификатор идеи
-     * @param reviewerUserId Идентификатор пользователя-эксперта, одобрившего идею
+     * @param ideaId    Идентификатор идеи
+     * @param principal Объект Principal
      * @return Тело ответа со статусом OK
      */
-    @PostMapping("/approve")
+    @PostMapping("/{idea_id}/approve")
     public ResponseEntity<Void> approve(
-            @RequestParam("idea_id") int ideaId,
-            @RequestParam("reviewer_user_id") int reviewerUserId
+            @PathVariable("idea_id") int ideaId,
+            Principal principal
     ) {
-        IdeaReview ideaReview = IdeaReview.builder()
-                .idea(
-                        Idea.builder()
-                                .id(ideaId)
-                                .build()
-                )
-                .reviewerUserId(reviewerUserId)
-                .ideaStatus(IdeaStatus.APPROVED)
-                .build();
-        ideaReviewService.add(ideaReview);
+        ideaReviewService.approve(ideaId, UUID.fromString(principal.getName()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
      * Отклонить идею
      *
-     * @param ideaId         Идентификатор идеи
-     * @param reviewerUserId Идентификатор пользователя-эксперта, отклонившего идею
+     * @param ideaId    Идентификатор идеи
+     * @param principal Объект Principal
      * @return Тело ответа со статусом OK
      */
-    @PostMapping("/decline")
+    @PostMapping("/{idea_id}/decline")
     public ResponseEntity<Void> decline(
-            @RequestParam("idea_id") int ideaId,
-            @RequestParam("reviewer_user_id") int reviewerUserId
+            @PathVariable("idea_id") int ideaId,
+            Principal principal
     ) {
-        IdeaReview ideaReview = IdeaReview.builder()
-                .idea(
-                        Idea.builder()
-                                .id(ideaId)
-                                .build()
-                )
-                .reviewerUserId(reviewerUserId)
-                .ideaStatus(IdeaStatus.DECLINED)
-                .build();
-        ideaReviewService.add(ideaReview);
+        ideaReviewService.decline(ideaId, UUID.fromString(principal.getName()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

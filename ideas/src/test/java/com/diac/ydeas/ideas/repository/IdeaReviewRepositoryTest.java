@@ -43,13 +43,13 @@ public class IdeaReviewRepositoryTest extends AbstractRepositoryIntegrationTest 
 
     @Test
     public void whenFindAll() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         IdeaStatus ideaStatus = IdeaStatus.APPROVED;
         IdeaReview ideaReview = ideaReviewRepository.save(
                 IdeaReview.builder()
                         .idea(idea)
                         .ideaStatus(ideaStatus)
-                        .reviewerUserId(number)
+                        .reviewerUserUuid(uuid)
                         .build()
         );
         assertThat(ideaReviewRepository.findAll()).contains(ideaReview);
@@ -57,13 +57,13 @@ public class IdeaReviewRepositoryTest extends AbstractRepositoryIntegrationTest 
 
     @Test
     public void whenFindById() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         IdeaStatus ideaStatus = IdeaStatus.APPROVED;
         IdeaReview ideaReview = ideaReviewRepository.save(
                 IdeaReview.builder()
                         .idea(idea)
                         .ideaStatus(ideaStatus)
-                        .reviewerUserId(number)
+                        .reviewerUserUuid(uuid)
                         .build()
         );
         IdeaReview ideaReviewInDb = ideaReviewRepository.findById(idea.getId())
@@ -72,29 +72,29 @@ public class IdeaReviewRepositoryTest extends AbstractRepositoryIntegrationTest 
     }
 
     @Test
-    public void whenFindAllByReviewerUserId() {
-        int number = 1;
+    public void whenFindAllByReviewerUserUuid() {
+        UUID uuid = UUID.randomUUID();
         IdeaStatus ideaStatus = IdeaStatus.APPROVED;
         IdeaReview ideaReview = ideaReviewRepository.save(
                 IdeaReview.builder()
                         .idea(idea)
                         .ideaStatus(ideaStatus)
-                        .reviewerUserId(number)
+                        .reviewerUserUuid(uuid)
                         .build()
         );
-        List<IdeaReview> ideaReviews = ideaReviewRepository.findAllByReviewerUserId(number);
+        List<IdeaReview> ideaReviews = ideaReviewRepository.findAllByReviewerUserUuid(uuid);
         assertThat(ideaReviews).contains(ideaReview);
     }
 
     @Test
     public void whenFindAllByIdeaStatus() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         IdeaStatus ideaStatus = IdeaStatus.APPROVED;
         IdeaReview ideaReview = ideaReviewRepository.save(
                 IdeaReview.builder()
                         .idea(idea)
                         .ideaStatus(ideaStatus)
-                        .reviewerUserId(number)
+                        .reviewerUserUuid(uuid)
                         .build()
         );
         List<IdeaReview> ideaReviews = ideaReviewRepository.findAllByIdeaStatus(ideaStatus);
@@ -104,28 +104,29 @@ public class IdeaReviewRepositoryTest extends AbstractRepositoryIntegrationTest 
     @Test
     public void wheAdd() {
         int number = 1;
+        UUID uuid = UUID.randomUUID();
         IdeaStatus ideaStatus = IdeaStatus.APPROVED;
         IdeaReview ideaReview = ideaReviewRepository.save(
                 IdeaReview.builder()
                         .idea(idea)
                         .ideaStatus(ideaStatus)
-                        .reviewerUserId(number)
+                        .reviewerUserUuid(uuid)
                         .build()
         );
         assertThat(ideaStatus).isEqualTo(ideaReview.getIdeaStatus());
-        assertThat(number).isEqualTo(ideaReview.getReviewerUserId());
+        assertThat(uuid).isEqualTo(ideaReview.getReviewerUserUuid());
     }
 
     @Test
     public void whenUpdate() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         IdeaStatus ideaStatus = IdeaStatus.APPROVED;
         IdeaStatus newStatus = IdeaStatus.DECLINED;
         IdeaReview ideaReview = ideaReviewRepository.save(
                 IdeaReview.builder()
                         .idea(idea)
                         .ideaStatus(ideaStatus)
-                        .reviewerUserId(number)
+                        .reviewerUserUuid(uuid)
                         .build()
         );
         ideaReview.setIdeaStatus(newStatus);
@@ -136,13 +137,13 @@ public class IdeaReviewRepositoryTest extends AbstractRepositoryIntegrationTest 
 
     @Test
     public void whenDelete() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         IdeaStatus ideaStatus = IdeaStatus.APPROVED;
         IdeaReview ideaReview = ideaReviewRepository.save(
                 IdeaReview.builder()
                         .idea(idea)
                         .ideaStatus(ideaStatus)
-                        .reviewerUserId(number)
+                        .reviewerUserUuid(uuid)
                         .build()
         );
         ideaReviewRepository.delete(ideaReview);

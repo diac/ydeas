@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.UUID;
+
 /**
  * Модель данных "Рассмотрение идеи"
  */
@@ -36,9 +38,9 @@ public class IdeaReview {
     /**
      * Пользователь-эксперт, рассмотревший идею
      */
-    @NotNull(message = "Idea reviewer ID is required")
-    @Column(name = "reviewer_user_id")
-    private Integer reviewerUserId;
+    @NotNull(message = "Idea reviewer UUID is required")
+    @Column(name = "reviewer_user_uuid")
+    private UUID reviewerUserUuid;
 
     /**
      * Статус идеи после рассмотрения

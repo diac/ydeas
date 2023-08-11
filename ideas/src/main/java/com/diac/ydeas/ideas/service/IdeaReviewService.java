@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Сервис для работы с объектами IdeaReview
@@ -30,10 +31,10 @@ public interface IdeaReviewService {
     /**
      * Найти все рассмотрения по ID пользователя
      *
-     * @param reviewerUserId Идентификатор пользователя-эксперта
+     * @param reviewerUserUuid UUID пользователя-эксперта
      * @return Список с рассмотрениями идеи
      */
-    List<IdeaReview> findAllByReviewerUserId(int reviewerUserId);
+    List<IdeaReview> findAllByReviewerUserUuid(UUID reviewerUserUuid);
 
     /**
      * Найти все рассмотрения по статусу идеи
@@ -74,4 +75,20 @@ public interface IdeaReviewService {
      * @param ideaId Идентификатор идеи
      */
     void delete(int ideaId);
+
+    /**
+     * Одобрить идею
+     *
+     * @param ideaId   Идентификатор идеи
+     * @param expertId UUID пользователя-эксперта
+     */
+    void approve(int ideaId, UUID expertId);
+
+    /**
+     * Отклонить идею
+     *
+     * @param ideaId   Идентификатор идеи
+     * @param expertId UUID пользователя-эксперта
+     */
+    void decline(int ideaId, UUID expertId);
 }
