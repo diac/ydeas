@@ -9,11 +9,13 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 /**
  * Конфигурация безопасности
  */
+@Component
 @EnableWebFluxSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
