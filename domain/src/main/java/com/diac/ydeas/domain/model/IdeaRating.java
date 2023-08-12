@@ -3,17 +3,20 @@ package com.diac.ydeas.domain.model;
 import com.diac.ydeas.domain.enumeration.IdeaStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  * Модель данных "Рейтинг идей"
  */
 @Entity
 @Immutable
+@Data
 @Table(name = "idea_rating")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,8 +39,8 @@ public class IdeaRating {
     /**
      * Идентификатор пользователя-автора идеи
      */
-    @Column(name = "idea_author_user_id")
-    private int ideaAuthorId;
+    @Column(name = "idea_author_uuid")
+    private UUID ideaAuthorUuid;
 
     /**
      * Дата и время создания идеи
