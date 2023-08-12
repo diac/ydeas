@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Сервис для работы с объектами IdeaRate
@@ -59,19 +60,19 @@ public class IdeaRateJpaService implements IdeaRateService {
      * @return Список с оценками
      */
     @Override
-    public List<IdeaRate> findAllByIdeaRateIdIdeaId(int ideaId) {
+    public List<IdeaRate> findAllByIdeaId(int ideaId) {
         return ideaRateRepository.findAllByIdeaRateIdIdeaId(ideaId);
     }
 
     /**
      * Найти все оценки по ID пользователя
      *
-     * @param userId Идентификатор пользователя
+     * @param userUuid UUID пользователя
      * @return Список с оценками
      */
     @Override
-    public List<IdeaRate> findAllByIdeaRateIdUserId(int userId) {
-        return ideaRateRepository.findAllByIdeaRateIdUserId(userId);
+    public List<IdeaRate> findAllByUserUuid(UUID userUuid) {
+        return ideaRateRepository.findAllByIdeaRateIdUserUuid(userUuid);
     }
 
     /**

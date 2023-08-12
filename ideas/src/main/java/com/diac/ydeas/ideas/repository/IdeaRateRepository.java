@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Репозиторий для хранения объектов IdeaRate (Оценка идеи)
@@ -22,10 +23,10 @@ public interface IdeaRateRepository extends JpaRepository<IdeaRate, IdeaRateId> 
     List<IdeaRate> findAllByIdeaRateIdIdeaId(int ideaId);
 
     /**
-     * Найти все оценки по ID пользователя
+     * Найти все оценки по UUID пользователя
      *
-     * @param userId Идентификатор пользователя
+     * @param userUuid UUID пользователя
      * @return Список с оценками
      */
-    List<IdeaRate> findAllByIdeaRateIdUserId(int userId);
+    List<IdeaRate> findAllByIdeaRateIdUserUuid(UUID userUuid);
 }

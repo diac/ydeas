@@ -46,7 +46,7 @@ public class IdeaRateJpaServiceTest {
 
     private static final IdeaRateId IDEA_RATE_ID = IdeaRateId.builder()
             .idea(IDEA_TEMPLATE)
-            .userId(1)
+            .userUuid(UUID.randomUUID())
             .build();
 
     @Autowired
@@ -84,7 +84,7 @@ public class IdeaRateJpaServiceTest {
     }
 
     @Test
-    public void whenFindAllByIdeaRateIdIdeaId() {
+    public void whenFindAllByIdeaId() {
         int ideaId = IDEA_RATE_ID.getIdea().getId();
         List<IdeaRate> expectedIdeaRates = List.of(
                 IdeaRate.builder()
@@ -92,23 +92,23 @@ public class IdeaRateJpaServiceTest {
                         .build()
         );
         Mockito.when(ideaRateRepository.findAllByIdeaRateIdIdeaId(ideaId)).thenReturn(expectedIdeaRates);
-        List<IdeaRate> ideaRates = ideaRateService.findAllByIdeaRateIdIdeaId(ideaId);
+        List<IdeaRate> ideaRates = ideaRateService.findAllByIdeaId(ideaId);
         assertThat(ideaRates).isEqualTo(expectedIdeaRates);
         Mockito.verify(ideaRateRepository).findAllByIdeaRateIdIdeaId(ideaId);
     }
 
     @Test
-    public void whenFindAllByIdeaRateIdUserId() {
-        int userId = IDEA_RATE_ID.getUserId();
+    public void whenFindAllByUserUuid() {
+        UUID userUuid = IDEA_RATE_ID.getUserUuid();
         List<IdeaRate> expectedIdeaRates = List.of(
                 IdeaRate.builder()
                         .ideaRateId(IDEA_RATE_ID)
                         .build()
         );
-        Mockito.when(ideaRateRepository.findAllByIdeaRateIdUserId(userId)).thenReturn(expectedIdeaRates);
-        List<IdeaRate> ideaRates = ideaRateService.findAllByIdeaRateIdUserId(userId);
+        Mockito.when(ideaRateRepository.findAllByIdeaRateIdUserUuid(userUuid)).thenReturn(expectedIdeaRates);
+        List<IdeaRate> ideaRates = ideaRateService.findAllByUserUuid(userUuid);
         assertThat(ideaRates).isEqualTo(expectedIdeaRates);
-        Mockito.verify(ideaRateRepository).findAllByIdeaRateIdUserId(userId);
+        Mockito.verify(ideaRateRepository).findAllByIdeaRateIdUserUuid(userUuid);
     }
 
     @Test

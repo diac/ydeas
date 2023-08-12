@@ -7,6 +7,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Составной ID для сущности IdeaRate
@@ -30,7 +31,7 @@ public class IdeaRateId implements Serializable {
     /**
      * Идентификатор пользователя, поставившего оценку
      */
-    @Column(name = "user_id")
+    @Column(name = "user_uuid")
     @EqualsAndHashCode.Include
-    private int userId;
+    private UUID userUuid;
 }

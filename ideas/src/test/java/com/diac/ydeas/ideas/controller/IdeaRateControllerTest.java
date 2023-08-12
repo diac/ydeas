@@ -13,10 +13,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import java.security.Principal;
+import java.util.UUID;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(IdeaRateController.class)
@@ -25,13 +29,9 @@ public class IdeaRateControllerTest {
 
     private static final String BASE_URL = "/idea_rate";
 
-    private static final String LIKE_URL = BASE_URL + "/like";
+    private static final String LIKE_URL = BASE_URL + "/%d/like";
 
-    private static final String DISLIKE_URL = BASE_URL + "/dislike";
-
-    private static final String IDEA_ID_PARAM_NAME = "idea_id";
-
-    private static final String USER_ID_PARAM_NAME = "user_id";
+    private static final String DISLIKE_URL = BASE_URL + "/%d/dislike";
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -49,46 +49,52 @@ public class IdeaRateControllerTest {
     @Test
     public void whenLike() throws Exception {
         int id = 1;
+        UUID uuid = UUID.randomUUID();
+        Principal principal = Mockito.mock(Principal.class);
+        Mockito.when(principal.getName()).thenReturn(uuid.toString());
         IdeaRateId ideaRateId = IdeaRateId.builder()
                 .idea(
                         Idea.builder()
                                 .id(id)
                                 .build()
                 )
-                .userId(id)
+                .userUuid(uuid)
                 .build();
         IdeaRate ideaRate = IdeaRate.builder()
                 .ideaRateId(ideaRateId)
                 .rate(Rate.LIKE)
                 .build();
         Mockito.when(ideaRateService.add(ideaRate)).thenReturn(ideaRate);
-        mockMvc.perform(
-                post(LIKE_URL)
-                        .param(IDEA_ID_PARAM_NAME, String.valueOf(id))
-                        .param(USER_ID_PARAM_NAME, String.valueOf(id))
-        ).andExpect(status().isOk());
+        String requestUrl = String.format(LIKE_URL, id);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post(requestUrl)
+                .principal(principal);
+        mockMvc.perform(requestBuilder).andExpect(status().isOk());
     }
 
     @Test
     public void whenDislike() throws Exception {
         int id = 1;
+        UUID uuid = UUID.randomUUID();
+        Principal principal = Mockito.mock(Principal.class);
+        Mockito.when(principal.getName()).thenReturn(uuid.toString());
         IdeaRateId ideaRateId = IdeaRateId.builder()
                 .idea(
                         Idea.builder()
                                 .id(id)
                                 .build()
                 )
-                .userId(id)
+                .userUuid(uuid)
                 .build();
         IdeaRate ideaRate = IdeaRate.builder()
                 .ideaRateId(ideaRateId)
                 .rate(Rate.DISLIKE)
                 .build();
         Mockito.when(ideaRateService.add(ideaRate)).thenReturn(ideaRate);
-        mockMvc.perform(
-                post(DISLIKE_URL)
-                        .param(IDEA_ID_PARAM_NAME, String.valueOf(id))
-                        .param(USER_ID_PARAM_NAME, String.valueOf(id))
-        ).andExpect(status().isOk());
+        String requestUrl = String.format(DISLIKE_URL, id);
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post(requestUrl)
+                .principal(principal);
+        mockMvc.perform(requestBuilder).andExpect(status().isOk());
     }
 }

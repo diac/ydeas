@@ -8,10 +8,10 @@ import com.diac.ydeas.ideas.service.IdeaRateService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.UUID;
 
 /**
  * Контроллер, реализующий доступ к объектам модели IdeaRate
@@ -30,13 +30,13 @@ public class IdeaRateController {
      * Поставить идее оценку "Нравится"
      *
      * @param ideaId Идентификатор идеи
-     * @param userId Идентификатор пользователя, поставившего оценку
+     * @param principal Объект Principal
      * @return Тело ответа со статусом OK
      */
-    @PostMapping("/like")
+    @PostMapping("/{idea_id}/like")
     public ResponseEntity<Void> like(
-            @RequestParam("idea_id") int ideaId,
-            @RequestParam("user_id") int userId
+            @PathVariable("idea_id") int ideaId,
+            Principal principal
     ) {
         IdeaRateId ideaRateId = IdeaRateId.builder()
                 .idea(
@@ -44,7 +44,7 @@ public class IdeaRateController {
                                 .id(ideaId)
                                 .build()
                 )
-                .userId(userId)
+                .userUuid(UUID.fromString(principal.getName()))
                 .build();
         ideaRateService.add(
                 IdeaRate.builder()
@@ -59,13 +59,13 @@ public class IdeaRateController {
      * Поставить идее оценку "Не нравится"
      *
      * @param ideaId Идентификатор идеи
-     * @param userId Идентификатор пользователя, поставившего оценку
+     * @param principal Объект Principal
      * @return Тело ответа со статусом OK
      */
-    @PostMapping("/dislike")
+    @PostMapping("/{idea_id}/dislike")
     public ResponseEntity<Void> dislike(
-            @RequestParam("idea_id") int ideaId,
-            @RequestParam("user_id") int userId
+            @PathVariable("idea_id") int ideaId,
+            Principal principal
     ) {
         IdeaRateId ideaRateId = IdeaRateId.builder()
                 .idea(
@@ -73,7 +73,7 @@ public class IdeaRateController {
                                 .id(ideaId)
                                 .build()
                 )
-                .userId(userId)
+                .userUuid(UUID.fromString(principal.getName()))
                 .build();
         ideaRateService.add(
                 IdeaRate.builder()

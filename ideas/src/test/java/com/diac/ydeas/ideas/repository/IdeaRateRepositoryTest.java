@@ -19,7 +19,6 @@ public class IdeaRateRepositoryTest extends AbstractRepositoryIntegrationTest {
     private static final Idea IDEA;
 
     static {
-        int number = 1;
         UUID uuid = UUID.randomUUID();
         String value = String.valueOf(System.currentTimeMillis());
         IDEA = Idea.builder()
@@ -43,14 +42,14 @@ public class IdeaRateRepositoryTest extends AbstractRepositoryIntegrationTest {
 
     @Test
     public void whenFindAll() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         Rate rate = Rate.LIKE;
         IdeaRate ideaRate = ideaRateRepository.save(
                 IdeaRate.builder()
                         .ideaRateId(
                                 IdeaRateId.builder()
                                         .idea(IDEA)
-                                        .userId(number)
+                                        .userUuid(uuid)
                                         .build()
                         )
                         .rate(rate)
@@ -61,14 +60,14 @@ public class IdeaRateRepositoryTest extends AbstractRepositoryIntegrationTest {
 
     @Test
     public void whenFindById() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         Rate rate = Rate.LIKE;
         IdeaRate ideaRate = ideaRateRepository.save(
                 IdeaRate.builder()
                         .ideaRateId(
                                 IdeaRateId.builder()
                                         .idea(IDEA)
-                                        .userId(number)
+                                        .userUuid(uuid)
                                         .build()
                         )
                         .rate(rate)
@@ -81,14 +80,14 @@ public class IdeaRateRepositoryTest extends AbstractRepositoryIntegrationTest {
 
     @Test
     public void whenFindAllByIdeaRateIdIdeaId() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         Rate rate = Rate.LIKE;
         IdeaRate ideaRate = ideaRateRepository.save(
                 IdeaRate.builder()
                         .ideaRateId(
                                 IdeaRateId.builder()
                                         .idea(IDEA)
-                                        .userId(number)
+                                        .userUuid(uuid)
                                         .build()
                         )
                         .rate(rate)
@@ -99,34 +98,34 @@ public class IdeaRateRepositoryTest extends AbstractRepositoryIntegrationTest {
     }
 
     @Test
-    public void whenALlByIdeaRateIdUserId() {
-        int number = 1;
+    public void whenFindAllIdeaRateIdUserUuid() {
+        UUID uuid = UUID.randomUUID();
         Rate rate = Rate.LIKE;
         IdeaRate ideaRate = ideaRateRepository.save(
                 IdeaRate.builder()
                         .ideaRateId(
                                 IdeaRateId.builder()
                                         .idea(IDEA)
-                                        .userId(number)
+                                        .userUuid(uuid)
                                         .build()
                         )
                         .rate(rate)
                         .build()
         );
-        List<IdeaRate> ideaRates = ideaRateRepository.findAllByIdeaRateIdUserId(number);
+        List<IdeaRate> ideaRates = ideaRateRepository.findAllByIdeaRateIdUserUuid(uuid);
         assertThat(ideaRates).contains(ideaRate);
     }
 
     @Test
     public void whenAdd() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         Rate rate = Rate.LIKE;
         IdeaRate ideaRate = ideaRateRepository.save(
                 IdeaRate.builder()
                         .ideaRateId(
                                 IdeaRateId.builder()
                                         .idea(IDEA)
-                                        .userId(number)
+                                        .userUuid(uuid)
                                         .build()
                         )
                         .rate(rate)
@@ -137,7 +136,7 @@ public class IdeaRateRepositoryTest extends AbstractRepositoryIntegrationTest {
 
     @Test
     public void whenUpdate() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         Rate rate = Rate.LIKE;
         Rate newRate = Rate.DISLIKE;
         IdeaRate ideaRate = ideaRateRepository.save(
@@ -145,7 +144,7 @@ public class IdeaRateRepositoryTest extends AbstractRepositoryIntegrationTest {
                         .ideaRateId(
                                 IdeaRateId.builder()
                                         .idea(IDEA)
-                                        .userId(number)
+                                        .userUuid(uuid)
                                         .build()
                         )
                         .rate(rate)
@@ -159,14 +158,14 @@ public class IdeaRateRepositoryTest extends AbstractRepositoryIntegrationTest {
 
     @Test
     public void whenDelete() {
-        int number = 1;
+        UUID uuid = UUID.randomUUID();
         Rate rate = Rate.LIKE;
         IdeaRate ideaRate = ideaRateRepository.save(
                 IdeaRate.builder()
                         .ideaRateId(
                                 IdeaRateId.builder()
                                         .idea(IDEA)
-                                        .userId(number)
+                                        .userUuid(uuid)
                                         .build()
                         )
                         .rate(rate)

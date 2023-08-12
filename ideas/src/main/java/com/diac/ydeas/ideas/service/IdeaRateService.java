@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Сервис для работы с объектами IdeaRate
@@ -33,15 +34,15 @@ public interface IdeaRateService {
      * @param ideaId Идентификатор идеи
      * @return Список с оценками
      */
-    List<IdeaRate> findAllByIdeaRateIdIdeaId(int ideaId);
+    List<IdeaRate> findAllByIdeaId(int ideaId);
 
     /**
      * Найти все оценки по ID пользователя
      *
-     * @param userId Идентификатор пользователя
+     * @param userUuid UUID пользователя
      * @return Список с оценками
      */
-    List<IdeaRate> findAllByIdeaRateIdUserId(int userId);
+    List<IdeaRate> findAllByUserUuid(UUID userUuid);
 
     /**
      * Найти оценку идеи по ID
