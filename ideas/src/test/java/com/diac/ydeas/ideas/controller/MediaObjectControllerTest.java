@@ -99,19 +99,23 @@ public class MediaObjectControllerTest {
 
     @Test
     public void whenDissociateWithIdea() throws Exception {
-        int intValue = 1;
-        String id = String.valueOf(intValue);
+        int id = 1;
         UUID uuid = UUID.randomUUID();
         Principal principal = Mockito.mock(Principal.class);
         Mockito.when(principal.getName()).thenReturn(uuid.toString());
         String requestUrl = "/media/idea_attachment";
+        IdeaMediaObjectAssociationDto ideaMediaObjectAssociationDto = new IdeaMediaObjectAssociationDto(
+                id,
+                id
+        );
+        String requestBody = OBJECT_WRITER.writeValueAsString(ideaMediaObjectAssociationDto);
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .delete(requestUrl)
-                .param("mediaObjectId", id)
-                .param("ideaId", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)
                 .principal(principal);
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk());
-        Mockito.verify(mediaObjectService).dissociateWithIdea(intValue, intValue, uuid);
+        Mockito.verify(mediaObjectService).dissociateWithIdea(id, id, uuid);
     }
 }

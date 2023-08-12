@@ -72,20 +72,18 @@ public class MediaObjectController {
     /**
      * Открепить медиа объект от идеи
      *
-     * @param mediaObjectId Идентификатор медиа объекта
-     * @param ideaId        Идентификатор идеи
+     * @param ideaMediaObjectAssociationDto DTO для определения связи между идеей и медиа-объектом
      * @param principal     Объект Principal
      * @return Тело ответа со статусом
      */
     @DeleteMapping("/idea_attachment")
     public ResponseEntity<Void> dissociateWithIdea(
-            @RequestParam("mediaObjectId") int mediaObjectId,
-            @RequestParam("ideaId") int ideaId,
+            @RequestBody IdeaMediaObjectAssociationDto ideaMediaObjectAssociationDto,
             Principal principal
     ) {
         mediaObjectService.dissociateWithIdea(
-                mediaObjectId,
-                ideaId,
+                ideaMediaObjectAssociationDto.mediaObjectId(),
+                ideaMediaObjectAssociationDto.ideaId(),
                 UUID.fromString(principal.getName())
         );
         return ResponseEntity.ok().build();
