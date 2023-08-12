@@ -1,7 +1,10 @@
 package com.diac.ydeas.ideas.controller;
 
+import com.diac.ydeas.domain.dto.IdeaMediaObjectAssociationDto;
 import com.diac.ydeas.domain.model.MediaObject;
 import com.diac.ydeas.ideas.service.MediaObjectService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -26,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(MediaObjectController.class)
 @AutoConfigureMockMvc
 public class MediaObjectControllerTest {
+
+    private static final ObjectWriter OBJECT_WRITER = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     @Autowired
     private WebApplicationContext webApplicationContext;
@@ -72,20 +77,24 @@ public class MediaObjectControllerTest {
 
     @Test
     public void whenAssociateWithIdea() throws Exception {
-        int intValue = 1;
-        String id = String.valueOf(intValue);
+        int id = 1;
         UUID uuid = UUID.randomUUID();
         Principal principal = Mockito.mock(Principal.class);
         Mockito.when(principal.getName()).thenReturn(uuid.toString());
         String requestUrl = "/media/idea_attachment";
+        IdeaMediaObjectAssociationDto ideaMediaObjectAssociationDto = new IdeaMediaObjectAssociationDto(
+                id,
+                id
+        );
+        String requestBody = OBJECT_WRITER.writeValueAsString(ideaMediaObjectAssociationDto);
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post(requestUrl)
-                .param("mediaObjectId", id)
-                .param("ideaId", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(requestBody)
                 .principal(principal);
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isOk());
-        Mockito.verify(mediaObjectService).associateWithIdea(intValue, intValue, uuid);
+        Mockito.verify(mediaObjectService).associateWithIdea(id, id, uuid);
     }
 
     @Test

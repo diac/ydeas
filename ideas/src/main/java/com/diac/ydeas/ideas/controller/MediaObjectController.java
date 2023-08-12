@@ -1,8 +1,10 @@
 package com.diac.ydeas.ideas.controller;
 
+import com.diac.ydeas.domain.dto.IdeaMediaObjectAssociationDto;
 import com.diac.ydeas.domain.model.MediaObject;
 import com.diac.ydeas.ideas.service.MediaObjectService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,20 +52,18 @@ public class MediaObjectController {
     /**
      * Прикрепить медиа объект к идее
      *
-     * @param mediaObjectId Идентификатор медиа объекта
-     * @param ideaId        Идентификатор идеи
+     * @param ideaMediaObjectAssociationDto DTO для определения связи между идеей и медиа-объектом
      * @param principal     Объект Principal
      * @return Тело ответа со статусом
      */
-    @PostMapping("/idea_attachment")
+    @PostMapping(value = "/idea_attachment", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Void> associateWithIdea(
-            @RequestParam("mediaObjectId") int mediaObjectId,
-            @RequestParam("ideaId") int ideaId,
+            @RequestBody IdeaMediaObjectAssociationDto ideaMediaObjectAssociationDto,
             Principal principal
     ) {
         mediaObjectService.associateWithIdea(
-                mediaObjectId,
-                ideaId,
+                ideaMediaObjectAssociationDto.mediaObjectId(),
+                ideaMediaObjectAssociationDto.ideaId(),
                 UUID.fromString(principal.getName())
         );
         return ResponseEntity.ok().build();
