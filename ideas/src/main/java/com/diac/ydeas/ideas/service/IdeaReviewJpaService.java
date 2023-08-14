@@ -1,5 +1,6 @@
 package com.diac.ydeas.ideas.service;
 
+import com.diac.ydeas.domain.dto.IdeaReviewNotificationDto;
 import com.diac.ydeas.domain.enumeration.IdeaStatus;
 import com.diac.ydeas.domain.exception.ResourceConstraintViolationException;
 import com.diac.ydeas.domain.exception.ResourceNotFoundException;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +29,16 @@ public class IdeaReviewJpaService implements IdeaReviewService {
      * Шаблон сообщения о том, что рассмотрение идеи не существует
      */
     private static final String IDEA_REVIEW_DOES_NOT_EXIST_MESSAGE = "Idea review #%s does not exist";
+
+    /**
+     * Тема Kafka для обмена сообщениями о рассмотрении идей
+     */
+    private static final String IDEA_REVIEW_KAFKA_NOTIFICATION_TOPIC = "idea-review-notification";
+
+    /**
+     * Шаблон Kafka-продюсера для отправки объектов IdeaReviewNotificationDto
+     */
+    private final KafkaTemplate<Integer, IdeaReviewNotificationDto> kafkaTemplate;
 
     /**
      * Сервис для работы с объектами Idea
@@ -162,25 +174,34 @@ public class IdeaReviewJpaService implements IdeaReviewService {
     /**
      * Одобрить идею
      *
-     * @param ideaId   Идентификатор идеи
+     * @param ideaId           Идентификатор идеи
      * @param reviewerUserUuid UUID пользователя-эксперта
      */
     @Override
     public void approve(int ideaId, UUID reviewerUserUuid) {
         Idea idea = ideaService.findById(ideaId);
         IdeaReview ideaReview = IdeaReview.builder()
-                .ideaId(ideaId)
+                .ideaId(idea.getId())
                 .idea(idea)
                 .reviewerUserUuid(reviewerUserUuid)
                 .ideaStatus(IdeaStatus.APPROVED)
                 .build();
         ideaReviewRepository.save(ideaReview);
+        kafkaTemplate.send(
+                IDEA_REVIEW_KAFKA_NOTIFICATION_TOPIC,
+                new IdeaReviewNotificationDto(
+                        idea.getId(),
+                        idea.getTitle(),
+                        idea.getAuthorUuid(),
+                        ideaReview.getIdeaStatus()
+                )
+        );
     }
 
     /**
      * Отклонить идею
      *
-     * @param ideaId   Идентификатор идеи
+     * @param ideaId           Идентификатор идеи
      * @param reviewerUserUuid UUID пользователя-эксперта
      */
     @Override
@@ -193,5 +214,14 @@ public class IdeaReviewJpaService implements IdeaReviewService {
                 .ideaStatus(IdeaStatus.DECLINED)
                 .build();
         ideaReviewRepository.save(ideaReview);
+        kafkaTemplate.send(
+                IDEA_REVIEW_KAFKA_NOTIFICATION_TOPIC,
+                new IdeaReviewNotificationDto(
+                        idea.getId(),
+                        idea.getTitle(),
+                        idea.getAuthorUuid(),
+                        ideaReview.getIdeaStatus()
+                )
+        );
     }
 }
