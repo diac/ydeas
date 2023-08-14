@@ -17,6 +17,7 @@
         <module>gateway</module>
         <module>users</module>
         <module>files</module>
+        <module>notifications</module>
     </modules>
 
     <properties>
