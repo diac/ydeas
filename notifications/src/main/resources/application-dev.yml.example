@@ -2,7 +2,7 @@ server:
   port: port_number
 spring:
   application:
-    name: NOTIFICATIONS
+    name: IDEAS
   datasource:
     url: db_url
     username: db_username
@@ -13,3 +13,5 @@ eureka:
   client:
     service-url:
       defaultZone: eureka-default-zone-url
+#noinspection undefined
+files-service-url: lb://FILES

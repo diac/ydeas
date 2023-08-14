@@ -48,3 +48,5 @@ build/
 /users/src/main/resources/application-dev.yml
 /files/src/main/resources/application.yml
 /files/src/main/resources/application-dev.yml
+/notifications/src/main/resources/application.yml
+/notifications/src/main/resources/application-dev.yml
