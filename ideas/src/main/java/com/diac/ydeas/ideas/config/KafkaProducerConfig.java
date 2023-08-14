@@ -42,6 +42,7 @@ public class KafkaProducerConfig {
 
     /**
      * Бин-фабрика Kafka-продюсера для объектов IdeaReviewNotificationDto
+     *
      * @return Фабрика Kafka-продюсера для объектов IdeaReviewNotificationDto
      */
     @Bean
@@ -51,6 +52,7 @@ public class KafkaProducerConfig {
 
     /**
      * Бин-шаблон Kafka-продюсера для отправки объектов IdeaReviewNotificationDto
+     *
      * @return Шаблон Kafka-продюсера для отправки объектов IdeaReviewNotificationDto
      */
     @Bean
