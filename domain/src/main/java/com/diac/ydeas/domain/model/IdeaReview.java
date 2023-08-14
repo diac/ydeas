@@ -30,7 +30,7 @@ public class IdeaReview {
     /**
      * Идея
      */
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "idea_id")
     @MapsId
     private Idea idea;
