@@ -9,6 +9,14 @@ spring:
     password: db_password
   liquibase:
     change-log: classpath:db/liquibase-changelog.xml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: jwt_issuer_uri
+  kafka:
+    bootstrap-servers: kafka_bootstrap_server_uri
+
 eureka:
   client:
     service-url:
