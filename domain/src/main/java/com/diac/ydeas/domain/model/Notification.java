@@ -60,5 +60,6 @@ public class Notification {
      * Статус уведомления
      */
     @Enumerated(EnumType.STRING)
+    @Column(name = "status")
     private NotificationStatus notificationStatus;
 }
