@@ -186,7 +186,11 @@ public class IdeaReviewJpaService implements IdeaReviewService {
                 .reviewerUserUuid(reviewerUserUuid)
                 .ideaStatus(IdeaStatus.APPROVED)
                 .build();
-        ideaReviewRepository.save(ideaReview);
+        try {
+            ideaReviewRepository.save(ideaReview);
+        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
+            throw new ResourceConstraintViolationException(e.getMessage());
+        }
         kafkaTemplate.send(
                 IDEA_REVIEW_KAFKA_NOTIFICATION_TOPIC,
                 new IdeaReviewNotificationDto(
@@ -213,7 +217,11 @@ public class IdeaReviewJpaService implements IdeaReviewService {
                 .reviewerUserUuid(reviewerUserUuid)
                 .ideaStatus(IdeaStatus.DECLINED)
                 .build();
-        ideaReviewRepository.save(ideaReview);
+        try {
+            ideaReviewRepository.save(ideaReview);
+        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
+            throw new ResourceConstraintViolationException(e.getMessage());
+        }
         kafkaTemplate.send(
                 IDEA_REVIEW_KAFKA_NOTIFICATION_TOPIC,
                 new IdeaReviewNotificationDto(
