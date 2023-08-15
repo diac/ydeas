@@ -9,13 +9,13 @@ import java.util.UUID;
  *
  * @param ideaId       Идентификатор идеи
  * @param ideaTitle    Заголовок идеи
- * @param ideaAuthorId UUID автора идеи
+ * @param ideaAuthorUuid UUID автора идеи
  * @param rate         Оценка идеи
  */
 public record IdeaRateNotificationDto(
         int ideaId,
         String ideaTitle,
-        UUID ideaAuthorId,
+        UUID ideaAuthorUuid,
         Rate rate
 ) {
 }
