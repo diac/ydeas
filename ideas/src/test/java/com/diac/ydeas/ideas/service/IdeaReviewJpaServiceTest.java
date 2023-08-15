@@ -1,5 +1,6 @@
 package com.diac.ydeas.ideas.service;
 
+import com.diac.ydeas.domain.dto.IdeaReviewNotificationDto;
 import com.diac.ydeas.domain.enumeration.IdeaStatus;
 import com.diac.ydeas.domain.exception.ResourceConstraintViolationException;
 import com.diac.ydeas.domain.exception.ResourceNotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.kafka.core.KafkaTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -53,6 +55,9 @@ public class IdeaReviewJpaServiceTest {
 
     @MockBean
     private IdeaService ideaService;
+
+    @MockBean
+    private KafkaTemplate<Integer, IdeaReviewNotificationDto> ideaReviewKafkaTemplate;
 
     @Test
     public void whenFindAll() {
