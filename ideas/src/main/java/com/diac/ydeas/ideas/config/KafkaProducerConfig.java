@@ -1,5 +1,6 @@
 package com.diac.ydeas.ideas.config;
 
+import com.diac.ydeas.domain.dto.IdeaRateNotificationDto;
 import com.diac.ydeas.domain.dto.IdeaReviewNotificationDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.IntegerSerializer;
@@ -51,6 +52,16 @@ public class KafkaProducerConfig {
     }
 
     /**
+     * Бин-фабрика Kafka-продюсера для объектов IdeaRateNotificationDto
+     *
+     * @return Фабрика Kafka-продюсера для объектов IdeaRateNotificationDto
+     */
+    @Bean
+    public ProducerFactory<Integer, IdeaRateNotificationDto> ideaRateProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(producerConfigs());
+    }
+
+    /**
      * Бин-шаблон Kafka-продюсера для отправки объектов IdeaReviewNotificationDto
      *
      * @return Шаблон Kafka-продюсера для отправки объектов IdeaReviewNotificationDto
@@ -58,5 +69,15 @@ public class KafkaProducerConfig {
     @Bean
     public KafkaTemplate<Integer, IdeaReviewNotificationDto> ideaReviewKafkaTemplate() {
         return new KafkaTemplate<>(ideaReviewProducerFactory());
+    }
+
+    /**
+     * Бин-шаблон Kafka-продюсера для отправки объектов IdeaRateNotificationDto
+     *
+     * @return Шаблон Kafka-продюсера для отправки объектов IdeaRateNotificationDto
+     */
+    @Bean
+    public KafkaTemplate<Integer, IdeaRateNotificationDto> ideaRateKafkaTemplate() {
+        return new KafkaTemplate<>(ideaRateProducerFactory());
     }
 }
