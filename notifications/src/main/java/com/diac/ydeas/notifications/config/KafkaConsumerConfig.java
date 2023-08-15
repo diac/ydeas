@@ -1,5 +1,6 @@
 package com.diac.ydeas.notifications.config;
 
+import com.diac.ydeas.domain.dto.IdeaRateNotificationDto;
 import com.diac.ydeas.domain.dto.IdeaReviewNotificationDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Deserializer;
@@ -66,7 +67,21 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(
                 consumerConfigs(),
                 new IntegerDeserializer(),
-                valueDeserializer()
+                ideaReviewValueDeserializer()
+        );
+    }
+
+    /**
+     * Бин-фабрика Kafka-консьюмера для объектов IdeaRateNotificationDto
+     *
+     * @return Фабрика Kafka-консьюмера для объектов IdeaRateNotificationDto
+     */
+    @Bean
+    public ConsumerFactory<Integer, IdeaRateNotificationDto> ideaRateConsumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(
+                consumerConfigs(),
+                new IntegerDeserializer(),
+                ideaRateValueDeserializer()
         );
     }
 
@@ -84,12 +99,36 @@ public class KafkaConsumerConfig {
     }
 
     /**
+     * Бин-фабрика контейнера Kafka-консьюмера для объектов IdeaRateNotificationDto
+     *
+     * @return Фабрика контейнера Kafka-консьюмера для объектов IdeaRateNotificationDto
+     */
+    @Bean
+    public KafkaListenerContainerFactory<?> ideaRateKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<Integer, IdeaRateNotificationDto> factory
+                = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(ideaRateConsumerFactory());
+        return factory;
+    }
+
+    /**
      * Получить десериализатор для объектов IdeaReviewNotificationDto
      *
      * @return Десериализатор для объектов IdeaReviewNotificationDto
      */
-    private Deserializer<IdeaReviewNotificationDto> valueDeserializer() {
+    private Deserializer<IdeaReviewNotificationDto> ideaReviewValueDeserializer() {
         JsonDeserializer<IdeaReviewNotificationDto> valueDeserializer = new JsonDeserializer<>();
+        valueDeserializer.addTrustedPackages(DESERIALIZER_TRUSTED_PACKAGES);
+        return valueDeserializer;
+    }
+
+    /**
+     * Получить десериализатор для объектов IdeaRateNotificationDto
+     *
+     * @return Десериализатор для объектов IdeaRateNotificationDto
+     */
+    private Deserializer<IdeaRateNotificationDto> ideaRateValueDeserializer() {
+        JsonDeserializer<IdeaRateNotificationDto> valueDeserializer = new JsonDeserializer<>();
         valueDeserializer.addTrustedPackages(DESERIALIZER_TRUSTED_PACKAGES);
         return valueDeserializer;
     }
