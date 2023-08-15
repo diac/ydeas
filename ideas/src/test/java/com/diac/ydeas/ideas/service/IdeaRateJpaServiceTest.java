@@ -1,5 +1,6 @@
 package com.diac.ydeas.ideas.service;
 
+import com.diac.ydeas.domain.dto.IdeaRateNotificationDto;
 import com.diac.ydeas.domain.exception.ResourceConstraintViolationException;
 import com.diac.ydeas.domain.exception.ResourceNotFoundException;
 import com.diac.ydeas.domain.model.Idea;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.kafka.core.KafkaTemplate;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -55,6 +57,12 @@ public class IdeaRateJpaServiceTest {
 
     @MockBean
     private IdeaRateRepository ideaRateRepository;
+
+    @MockBean
+    private KafkaTemplate<Integer, IdeaRateNotificationDto> kafkaTemplate;
+
+    @MockBean
+    private IdeaService ideaService;
 
     @Test
     public void whenFindAll() {
@@ -224,6 +232,7 @@ public class IdeaRateJpaServiceTest {
 
     @Test
     public void whenLike() {
+        Mockito.when(ideaService.findById(IDEA_RATE_ID.getIdea().getId())).thenReturn(IDEA_TEMPLATE);
         IdeaRate ideaRate = IdeaRate.builder()
                 .ideaRateId(IDEA_RATE_ID)
                 .build();
@@ -239,6 +248,7 @@ public class IdeaRateJpaServiceTest {
 
     @Test
     public void whenLikeViolatesConstraintsThenThrowException() {
+        Mockito.when(ideaService.findById(IDEA_RATE_ID.getIdea().getId())).thenReturn(IDEA_TEMPLATE);
         IdeaRate ideaRate = IdeaRate.builder()
                 .ideaRateId(IDEA_RATE_ID)
                 .build();
@@ -254,6 +264,7 @@ public class IdeaRateJpaServiceTest {
 
     @Test
     public void whenLikeViolatesDataIntegrityThenThrowException() {
+        Mockito.when(ideaService.findById(IDEA_RATE_ID.getIdea().getId())).thenReturn(IDEA_TEMPLATE);
         IdeaRate ideaRate = IdeaRate.builder()
                 .ideaRateId(IDEA_RATE_ID)
                 .build();
@@ -269,6 +280,7 @@ public class IdeaRateJpaServiceTest {
 
     @Test
     public void whenDislike() {
+        Mockito.when(ideaService.findById(IDEA_RATE_ID.getIdea().getId())).thenReturn(IDEA_TEMPLATE);
         IdeaRate ideaRate = IdeaRate.builder()
                 .ideaRateId(IDEA_RATE_ID)
                 .build();
@@ -284,6 +296,7 @@ public class IdeaRateJpaServiceTest {
 
     @Test
     public void whenDislikeViolatesConstraintsThenThrowException() {
+        Mockito.when(ideaService.findById(IDEA_RATE_ID.getIdea().getId())).thenReturn(IDEA_TEMPLATE);
         IdeaRate ideaRate = IdeaRate.builder()
                 .ideaRateId(IDEA_RATE_ID)
                 .build();
@@ -299,6 +312,7 @@ public class IdeaRateJpaServiceTest {
 
     @Test
     public void whenDislikeViolatesDataIntegrityThenThrowException() {
+        Mockito.when(ideaService.findById(IDEA_RATE_ID.getIdea().getId())).thenReturn(IDEA_TEMPLATE);
         IdeaRate ideaRate = IdeaRate.builder()
                 .ideaRateId(IDEA_RATE_ID)
                 .build();

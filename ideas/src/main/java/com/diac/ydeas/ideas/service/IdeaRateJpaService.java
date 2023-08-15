@@ -1,5 +1,6 @@
 package com.diac.ydeas.ideas.service;
 
+import com.diac.ydeas.domain.dto.IdeaRateNotificationDto;
 import com.diac.ydeas.domain.enumeration.Rate;
 import com.diac.ydeas.domain.exception.ResourceConstraintViolationException;
 import com.diac.ydeas.domain.exception.ResourceNotFoundException;
@@ -12,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,9 +32,24 @@ public class IdeaRateJpaService implements IdeaRateService {
     private static final String IDEA_RATE_DOES_NOT_EXIST_MESSAGE = "Idea rate #%s does not exist";
 
     /**
+     * Тема Kafka для обмена сообщениями об оценках идей
+     */
+    private static final String IDEA_RATE_KAFKA_NOTIFICATION_TOPIC = "idea-rate-notification";
+
+    /**
+     * Шаблон Kafka-продюсера для отправки объектов IdeaRateNotificationDto
+     */
+    private final KafkaTemplate<Integer, IdeaRateNotificationDto> kafkaTemplate;
+
+    /**
      * Репозиторий для хранения объектов IdeaRate
      */
     private final IdeaRateRepository ideaRateRepository;
+
+    /**
+     * Сервис для работы с объектами Idea
+     */
+    private final IdeaService ideaService;
 
     /**
      * Найти все оценки идей
@@ -159,12 +176,9 @@ public class IdeaRateJpaService implements IdeaRateService {
      */
     @Override
     public void like(int ideaId, UUID userUuid) {
+        Idea idea = ideaService.findById(ideaId);
         IdeaRateId ideaRateId = IdeaRateId.builder()
-                .idea(
-                        Idea.builder()
-                                .id(ideaId)
-                                .build()
-                )
+                .idea(idea)
                 .userUuid(userUuid)
                 .build();
         IdeaRate ideaRate = IdeaRate.builder()
@@ -176,6 +190,15 @@ public class IdeaRateJpaService implements IdeaRateService {
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new ResourceConstraintViolationException(e.getMessage());
         }
+        kafkaTemplate.send(
+                IDEA_RATE_KAFKA_NOTIFICATION_TOPIC,
+                new IdeaRateNotificationDto(
+                        idea.getId(),
+                        idea.getTitle(),
+                        idea.getAuthorUuid(),
+                        ideaRate.getRate()
+                )
+        );
     }
 
     /**
@@ -186,12 +209,9 @@ public class IdeaRateJpaService implements IdeaRateService {
      */
     @Override
     public void dislike(int ideaId, UUID userUuid) {
+        Idea idea = ideaService.findById(ideaId);
         IdeaRateId ideaRateId = IdeaRateId.builder()
-                .idea(
-                        Idea.builder()
-                                .id(ideaId)
-                                .build()
-                )
+                .idea(idea)
                 .userUuid(userUuid)
                 .build();
         IdeaRate ideaRate = IdeaRate.builder()
@@ -203,5 +223,14 @@ public class IdeaRateJpaService implements IdeaRateService {
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new ResourceConstraintViolationException(e.getMessage());
         }
+        kafkaTemplate.send(
+                IDEA_RATE_KAFKA_NOTIFICATION_TOPIC,
+                new IdeaRateNotificationDto(
+                        idea.getId(),
+                        idea.getTitle(),
+                        idea.getAuthorUuid(),
+                        ideaRate.getRate()
+                )
+        );
     }
 }
