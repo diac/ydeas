@@ -140,10 +140,10 @@ public class NotificationServiceImpl implements NotificationService {
      * Выполнить работу по отправке уведомлений
      */
     private void processNotificationDelivery() {
-        if (notificationsQueue.isEmpty()) {
+        Notification notification = notificationsQueue.poll();
+        if (notification == null) {
             return;
         }
-        Notification notification = notificationsQueue.poll();
         if (send(notification)) {
             notification.setNotificationStatus(NotificationStatus.SENT);
             notificationRepository.save(notification);
