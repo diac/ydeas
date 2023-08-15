@@ -1,7 +1,9 @@
 package com.diac.ydeas.ideas.service;
 
+import com.diac.ydeas.domain.enumeration.Rate;
 import com.diac.ydeas.domain.exception.ResourceConstraintViolationException;
 import com.diac.ydeas.domain.exception.ResourceNotFoundException;
+import com.diac.ydeas.domain.model.Idea;
 import com.diac.ydeas.domain.model.IdeaRate;
 import com.diac.ydeas.domain.model.IdeaRateId;
 import com.diac.ydeas.ideas.repository.IdeaRateRepository;
@@ -147,5 +149,59 @@ public class IdeaRateJpaService implements IdeaRateService {
                             );
                         }
                 );
+    }
+
+    /**
+     * Поставить оценку "Нравится"
+     *
+     * @param ideaId   Идентификатор идеи
+     * @param userUuid UUID пользователя, поставившего оценку
+     */
+    @Override
+    public void like(int ideaId, UUID userUuid) {
+        IdeaRateId ideaRateId = IdeaRateId.builder()
+                .idea(
+                        Idea.builder()
+                                .id(ideaId)
+                                .build()
+                )
+                .userUuid(userUuid)
+                .build();
+        IdeaRate ideaRate = IdeaRate.builder()
+                .ideaRateId(ideaRateId)
+                .rate(Rate.LIKE)
+                .build();
+        try {
+            ideaRateRepository.save(ideaRate);
+        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
+            throw new ResourceConstraintViolationException(e.getMessage());
+        }
+    }
+
+    /**
+     * Поставить оценку "Не нравится"
+     *
+     * @param ideaId   Идентификатор идеи
+     * @param userUuid UUID пользователя, поставившего оценку
+     */
+    @Override
+    public void dislike(int ideaId, UUID userUuid) {
+        IdeaRateId ideaRateId = IdeaRateId.builder()
+                .idea(
+                        Idea.builder()
+                                .id(ideaId)
+                                .build()
+                )
+                .userUuid(userUuid)
+                .build();
+        IdeaRate ideaRate = IdeaRate.builder()
+                .ideaRateId(ideaRateId)
+                .rate(Rate.DISLIKE)
+                .build();
+        try {
+            ideaRateRepository.save(ideaRate);
+        } catch (DataIntegrityViolationException | ConstraintViolationException e) {
+            throw new ResourceConstraintViolationException(e.getMessage());
+        }
     }
 }

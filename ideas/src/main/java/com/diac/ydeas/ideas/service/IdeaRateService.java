@@ -75,4 +75,20 @@ public interface IdeaRateService {
      * @param ideaRateId Идентификатор оценки идеи (объект IdeaRateId)
      */
     void delete(IdeaRateId ideaRateId);
+
+    /**
+     * Поставить оценку "Нравится"
+     *
+     * @param ideaId   Идентификатор идеи
+     * @param userUuid UUID пользователя, поставившего оценку
+     */
+    void like(int ideaId, UUID userUuid);
+
+    /**
+     * Поставить оценку "Не нравится"
+     *
+     * @param ideaId   Идентификатор идеи
+     * @param userUuid UUID пользователя, поставившего оценку
+     */
+    void dislike(int ideaId, UUID userUuid);
 }

@@ -1,14 +1,13 @@
 package com.diac.ydeas.ideas.controller;
 
-import com.diac.ydeas.domain.enumeration.Rate;
-import com.diac.ydeas.domain.model.Idea;
-import com.diac.ydeas.domain.model.IdeaRate;
-import com.diac.ydeas.domain.model.IdeaRateId;
 import com.diac.ydeas.ideas.service.IdeaRateService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.UUID;
@@ -29,7 +28,7 @@ public class IdeaRateController {
     /**
      * Поставить идее оценку "Нравится"
      *
-     * @param ideaId Идентификатор идеи
+     * @param ideaId    Идентификатор идеи
      * @param principal Объект Principal
      * @return Тело ответа со статусом OK
      */
@@ -38,27 +37,14 @@ public class IdeaRateController {
             @PathVariable("idea_id") int ideaId,
             Principal principal
     ) {
-        IdeaRateId ideaRateId = IdeaRateId.builder()
-                .idea(
-                        Idea.builder()
-                                .id(ideaId)
-                                .build()
-                )
-                .userUuid(UUID.fromString(principal.getName()))
-                .build();
-        ideaRateService.add(
-                IdeaRate.builder()
-                        .ideaRateId(ideaRateId)
-                        .rate(Rate.LIKE)
-                        .build()
-        );
+        ideaRateService.like(ideaId, UUID.fromString(principal.getName()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
      * Поставить идее оценку "Не нравится"
      *
-     * @param ideaId Идентификатор идеи
+     * @param ideaId    Идентификатор идеи
      * @param principal Объект Principal
      * @return Тело ответа со статусом OK
      */
@@ -67,20 +53,7 @@ public class IdeaRateController {
             @PathVariable("idea_id") int ideaId,
             Principal principal
     ) {
-        IdeaRateId ideaRateId = IdeaRateId.builder()
-                .idea(
-                        Idea.builder()
-                                .id(ideaId)
-                                .build()
-                )
-                .userUuid(UUID.fromString(principal.getName()))
-                .build();
-        ideaRateService.add(
-                IdeaRate.builder()
-                        .ideaRateId(ideaRateId)
-                        .rate(Rate.DISLIKE)
-                        .build()
-        );
+        ideaRateService.dislike(ideaId, UUID.fromString(principal.getName()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

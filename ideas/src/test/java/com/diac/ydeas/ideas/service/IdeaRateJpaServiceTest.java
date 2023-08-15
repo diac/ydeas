@@ -7,6 +7,7 @@ import com.diac.ydeas.domain.model.IdeaRate;
 import com.diac.ydeas.domain.model.IdeaRateId;
 import com.diac.ydeas.ideas.repository.IdeaRateRepository;
 import jakarta.validation.ConstraintViolationException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -219,5 +220,95 @@ public class IdeaRateJpaServiceTest {
         assertThatThrownBy(
                 () -> ideaRateService.delete(IDEA_RATE_ID)
         ).isInstanceOf(ResourceNotFoundException.class);
+    }
+
+    @Test
+    public void whenLike() {
+        IdeaRate ideaRate = IdeaRate.builder()
+                .ideaRateId(IDEA_RATE_ID)
+                .build();
+        Mockito.when(ideaRateRepository.save(ideaRate)).thenReturn(ideaRate);
+        Assertions.assertAll(
+                () -> ideaRateService.like(
+                        IDEA_RATE_ID.getIdea().getId(),
+                        IDEA_RATE_ID.getUserUuid()
+                )
+        );
+        Mockito.verify(ideaRateRepository).save(ideaRate);
+    }
+
+    @Test
+    public void whenLikeViolatesConstraintsThenThrowException() {
+        IdeaRate ideaRate = IdeaRate.builder()
+                .ideaRateId(IDEA_RATE_ID)
+                .build();
+        Mockito.when(ideaRateRepository.save(ideaRate))
+                .thenThrow(ConstraintViolationException.class);
+        assertThatThrownBy(
+                () -> ideaRateService.like(
+                        IDEA_RATE_ID.getIdea().getId(),
+                        IDEA_RATE_ID.getUserUuid()
+                )
+        ).isInstanceOf(ResourceConstraintViolationException.class);
+    }
+
+    @Test
+    public void whenLikeViolatesDataIntegrityThenThrowException() {
+        IdeaRate ideaRate = IdeaRate.builder()
+                .ideaRateId(IDEA_RATE_ID)
+                .build();
+        Mockito.when(ideaRateRepository.save(ideaRate))
+                .thenThrow(DataIntegrityViolationException.class);
+        assertThatThrownBy(
+                () -> ideaRateService.like(
+                        IDEA_RATE_ID.getIdea().getId(),
+                        IDEA_RATE_ID.getUserUuid()
+                )
+        ).isInstanceOf(ResourceConstraintViolationException.class);
+    }
+
+    @Test
+    public void whenDislike() {
+        IdeaRate ideaRate = IdeaRate.builder()
+                .ideaRateId(IDEA_RATE_ID)
+                .build();
+        Mockito.when(ideaRateRepository.save(ideaRate)).thenReturn(ideaRate);
+        Assertions.assertAll(
+                () -> ideaRateService.dislike(
+                        IDEA_RATE_ID.getIdea().getId(),
+                        IDEA_RATE_ID.getUserUuid()
+                )
+        );
+        Mockito.verify(ideaRateRepository).save(ideaRate);
+    }
+
+    @Test
+    public void whenDislikeViolatesConstraintsThenThrowException() {
+        IdeaRate ideaRate = IdeaRate.builder()
+                .ideaRateId(IDEA_RATE_ID)
+                .build();
+        Mockito.when(ideaRateRepository.save(ideaRate))
+                .thenThrow(ConstraintViolationException.class);
+        assertThatThrownBy(
+                () -> ideaRateService.dislike(
+                        IDEA_RATE_ID.getIdea().getId(),
+                        IDEA_RATE_ID.getUserUuid()
+                )
+        ).isInstanceOf(ResourceConstraintViolationException.class);
+    }
+
+    @Test
+    public void whenDislikeViolatesDataIntegrityThenThrowException() {
+        IdeaRate ideaRate = IdeaRate.builder()
+                .ideaRateId(IDEA_RATE_ID)
+                .build();
+        Mockito.when(ideaRateRepository.save(ideaRate))
+                .thenThrow(DataIntegrityViolationException.class);
+        assertThatThrownBy(
+                () -> ideaRateService.dislike(
+                        IDEA_RATE_ID.getIdea().getId(),
+                        IDEA_RATE_ID.getUserUuid()
+                )
+        ).isInstanceOf(ResourceConstraintViolationException.class);
     }
 }
