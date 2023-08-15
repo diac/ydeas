@@ -24,11 +24,17 @@ public class NotificationController {
      */
     private final NotificationService notificationService;
 
+    /**
+     * Метод-слушатель Kafka-темы IDEA_REVIEW_KAFKA_NOTIFICATION_TOPIC. При получении сообщения из темы помещает
+     * полученный объект в очередь для обработки в NotificationService
+     *
+     * @param message Сообщение IdeaReviewNotificationDto
+     */
     @KafkaListener(
             topics = {IDEA_REVIEW_KAFKA_NOTIFICATION_TOPIC},
             containerFactory = "ideaReviewKafkaListenerContainerFactory"
     )
     public void onIdeaReviewMessage(ConsumerRecord<Integer, IdeaReviewNotificationDto> message) {
-        notificationService.add(message.value());
+        notificationService.enqueue(message.value());
     }
 }
