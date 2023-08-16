@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: GATEWAY
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: IDEAS
+          uri: lb://IDEAS
+          predicates:
+            - Path=/ideas/**
+          filters:
+            - RewritePath=/ideas/(?<segment>.*), /$\{segment}
+        - id: USERS
+          uri: lb://USERS
+          predicates:
+            - Path=/users/**
+          filters:
+            - RewritePath=/users/(?<segment>.*), /$\{segment}
+        - id: FILES
+          uri: lb://FILES
+          predicates:
+            - Path=/files/**
+          filters:
+            - RewritePath=/files/(?<segment>.*), /$\{segment}
