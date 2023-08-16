@@ -129,7 +129,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
       - files-service-url=http://app-files
       - spring.kafka.bootstrap-servers=http://kafka:9092
-      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://127.0.0.1:8180/realms/${KEYCLOAK_REALM_NAME}
+      - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8180/realms/${KEYCLOAK_REALM_NAME}
     depends_on:
       - app-files
       - db-ydeas
@@ -149,7 +149,7 @@ services:
       - spring.application.name=NOTIFICATIONS
       - spring.profiles.active=prod
       - eureka.client.serviceUrl.defaultZone=http://app-eureka-server:8761/eureka/
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-ydeas:5432/ydeas_ideas
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db-ydeas:5432/ydeas_notifications
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USERNAME}
       - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
       - spring.kafka.consumer.group-id=${KAFKA_CONSUMER_GROUP_ID}
