@@ -1,0 +1,82 @@
+version: "3.9"
+
+networks:
+  ydeas_local:
+    driver: bridge
+
+### Services ###
+services:
+  ### Eureka ###
+  app-eureka-server:
+    image: ndiac/ydeas_eureka_server
+    build:
+      context: .
+      dockerfile: eureka-server/Dockerfile
+    container_name: ydeas_eureka_server
+    environment:
+      - spring.application.name=EUREKA-SERVER
+    networks:
+      - ydeas_local
+
+  ### Files ###
+  app-files:
+    image: ndiac/ydeas_files
+    build:
+      context: .
+      dockerfile: files/Dockerfile
+    container_name: ydeas_files
+    environment:
+      - spring.application.name=FILES
+      - spring.profiles.active=prod
+    networks:
+      - ydeas_local
+
+  ### Ideas ###
+  app-ideas:
+    image: ndiac/ydeas_ideas
+    build:
+      context: .
+      dockerfile: ideas/Dockerfile
+    container_name: ydeas_ideas
+    environment:
+      - spring.application.name=IDEAS
+      - spring.profiles.active=prod
+    networks:
+      - ydeas_local
+    depends_on:
+      -  app-files
+
+  ### Notifications ###
+  app-notifications:
+    image: ndiac/ydeas_notifications
+    build:
+      context: .
+      dockerfile: notifications/Dockerfile
+    environment:
+      - spring.application.name=NOTIFICATIONS
+      - spring.profiles.active=prod
+    networks:
+      - ydeas_local
+
+  ### Users ###
+  app-users:
+    image: ndiac/ydeas_users
+    build:
+      context: .
+      dockerfile: users/Dockerfile
+    environment:
+      - spring.application.name=USERS
+      - spring.profiles.active=prod
+    networks:
+      - ydeas_local
+
+  ### Gateway ###
+  app-gateway:
+    image: ndiac/ydeas_gateway
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    container_name: ydeas_gateway
+    environment:
+      - spring.application.name=GATEWAY
+      - spring.profiles.active=prod
