@@ -89,4 +89,16 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.diac.ydeas.notifications.NotificationsApp</mainClass>
+                    <layout>JAR</layout>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
