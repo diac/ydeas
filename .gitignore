@@ -40,14 +40,9 @@ build/
 .DS_Store
 
 ### Project Specific ###
-/ideas/src/main/resources/application.yml
 /ideas/src/main/resources/application-dev.yml
-/gateway/src/main/resources/application.yml
 /gateway/src/main/resources/application-dev.yml
-/users/src/main/resources/application.yml
 /users/src/main/resources/application-dev.yml
-/files/src/main/resources/application.yml
 /files/src/main/resources/application-dev.yml
-/notifications/src/main/resources/application.yml
 /notifications/src/main/resources/application-dev.yml
 /.env
