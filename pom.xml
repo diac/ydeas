@@ -119,6 +119,9 @@
     <profiles>
         <profile>
             <id>test</id>
+            <properties>
+                <liquibase.change-log>classpath:db/liquibase-changelog.xml</liquibase.change-log>
+            </properties>
         </profile>
     </profiles>
 </project>
