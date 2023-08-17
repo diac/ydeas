@@ -115,4 +115,10 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>test</id>
+        </profile>
+    </profiles>
 </project>
