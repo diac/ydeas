@@ -4,7 +4,7 @@ ENV HOME=/usr/app
 RUN mkdir -p $HOME
 WORKDIR $HOME
 ADD . $HOME
-RUN --mount=type=cache,target=/root/.m2 mvn -f $HOME/pom.xml --projects domain,gateway clean package -Dmaven.test.skip=true
+RUN --mount=type=cache,target=/root/.m2 mvn -f $HOME/pom.xml --projects domain,gateway clean package -P prod -Dmaven.test.skip=true
 
 # Launch the app
 FROM openjdk:17.0.2-jdk
