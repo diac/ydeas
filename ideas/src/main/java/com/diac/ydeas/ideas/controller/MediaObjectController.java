@@ -34,10 +34,10 @@ public class MediaObjectController {
      * @param principal     Объект Principal
      * @return Тело ответа с прикрепленным медиа объектом
      */
-    @PostMapping("/upload_for_idea")
+    @PostMapping("/upload_for_idea/{ideaId}")
     public ResponseEntity<MediaObject> uploadForIdea(
             @RequestParam("file") MultipartFile multipartFile,
-            @RequestParam("ideaId") int ideaId,
+            @PathVariable("ideaId") int ideaId,
             Principal principal
     ) {
         MediaObject mediaObject = mediaObjectService.uploadFileForIdea(

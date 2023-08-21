@@ -64,11 +64,10 @@ public class MediaObjectControllerTest {
                 .build();
         Mockito.when(mediaObjectService.uploadFileForIdea(multipartFile, intValue, uuid))
                 .thenReturn(mediaObject);
-        String requestUrl = "/media/upload_for_idea";
+        String requestUrl = String.format("/media/upload_for_idea/%d", intValue);
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .multipart(requestUrl)
                 .file((MockMultipartFile) multipartFile)
-                .param("ideaId", String.valueOf(intValue))
                 .principal(principal);
         mockMvc.perform(requestBuilder)
                 .andExpect(status().isCreated());
