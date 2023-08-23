@@ -6,7 +6,7 @@ public class IdeasPostgreSQLContainer extends PostgreSQLContainer<IdeasPostgreSQ
 
     private static final String DB_DOCKER_IMAGE = "postgres:14.8";
 
-    private static final String TEST_DB_NAME = "knowledgebase-integration-tests-db";
+    private static final String TEST_DB_NAME = "ideas-integration-tests-db";
 
     private static final String TEST_DB_USERNAME = "sa";
 
