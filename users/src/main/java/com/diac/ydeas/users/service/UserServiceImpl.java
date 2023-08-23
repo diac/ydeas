@@ -13,15 +13,29 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * Сервис для работы с объектами User
+ */
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    /**
+     * Бин Keycloak
+     */
     private final Keycloak keycloak;
 
+    /**
+     * Имя рэлма в Keycloak
+     */
     @Value("${keycloak.realmName}")
     private String realmName;
 
+    /**
+     * Найти всех пользователей
+     *
+     * @return Список с пользователями
+     */
     @Override
     public List<User> findAll() {
         final RealmResource realmResource = keycloak.realm(realmName);
