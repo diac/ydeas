@@ -8,21 +8,41 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Конфигурация Keycloak
+ */
 @Configuration
 public class KeycloakConfig {
 
+    /**
+     * URL сервера Keycloak
+     */
     @Value("${keycloak.serverUrl}")
     private String serverUrl;
 
+    /**
+     * Имя рэлма в Keycloak
+     */
     @Value("${keycloak.realmName}")
     private String realmName;
 
+    /**
+     * Идентификатор сервисного аккаунта Keycloak
+     */
     @Value("${keycloak.clientId}")
     private String clientId;
 
+    /**
+     * Секрет сервисного аккаунта Keycloak
+     */
     @Value("${keycloak.clientSecret}")
     private String clientSecret;
 
+    /**
+     * Сформировать бин Keycloak
+     *
+     * @return Бин Keycloak
+     */
     @Bean
     public Keycloak keycloak() {
         return KeycloakBuilder.builder()
