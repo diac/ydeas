@@ -1,4 +1,4 @@
-package repository.container;
+package com.diac.ydeas.notifications.repository.container;
 
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.BeforeAllCallback;

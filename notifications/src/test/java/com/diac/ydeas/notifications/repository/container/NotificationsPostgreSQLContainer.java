@@ -1,4 +1,4 @@
-package repository.container;
+package com.diac.ydeas.notifications.repository.container;
 
 import org.testcontainers.containers.PostgreSQLContainer;
 
@@ -6,7 +6,7 @@ public class NotificationsPostgreSQLContainer extends PostgreSQLContainer<Notifi
 
     private static final String DB_DOCKER_IMAGE = "postgres:14.8";
 
-    private static final String TEST_DB_NAME = "ideas-integration-tests-db";
+    private static final String TEST_DB_NAME = "notifications-integration-tests-db";
 
     private static final String TEST_DB_USERNAME = "sa";
 
