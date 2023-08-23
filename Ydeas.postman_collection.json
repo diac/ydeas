@@ -1,0 +1,530 @@
+{
+	"info": {
+		"_postman_id": "38066352-bc16-450f-a94a-dc1d65f97592",
+		"name": "Ydeas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28646073"
+	},
+	"item": [
+		{
+			"name": "Ideas",
+			"item": [
+				{
+					"name": "Media",
+					"item": [
+						{
+							"name": "Upload Idea Attachment",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "file",
+											"type": "file",
+											"src": "file_url"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{ydeas_url}}/ideas/media/upload_for_idea/1",
+									"host": [
+										"{{ydeas_url}}"
+									],
+									"path": [
+										"ideas",
+										"media",
+										"upload_for_idea",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Associate Attachment with Idea",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"mediaObjectId\": 1,\r\n    \"ideaId\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ydeas_url}}/ideas/media/idea_attachment",
+									"host": [
+										"{{ydeas_url}}"
+									],
+									"path": [
+										"ideas",
+										"media",
+										"idea_attachment"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Dissociate Attachment with Idea",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"mediaObjectId\": 1,\r\n    \"ideaId\": 1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{ydeas_url}}/ideas/media/idea_attachment",
+									"host": [
+										"{{ydeas_url}}"
+									],
+									"path": [
+										"ideas",
+										"media",
+										"idea_attachment"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Ideas Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ydeas_url}}/ideas/idea",
+							"host": [
+								"{{ydeas_url}}"
+							],
+							"path": [
+								"ideas",
+								"idea"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add new Idea",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"My another idea\",\r\n    \"description\": \"Smoking!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ydeas_url}}/ideas/idea",
+							"host": [
+								"{{ydeas_url}}"
+							],
+							"path": [
+								"ideas",
+								"idea"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Idea",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"My idea\",\r\n    \"description\": \"My awesome idea\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ydeas_url}}/ideas/idea/1",
+							"host": [
+								"{{ydeas_url}}"
+							],
+							"path": [
+								"ideas",
+								"idea",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Idea Copy",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{ydeas_url}}/ideas/idea/1",
+							"host": [
+								"{{ydeas_url}}"
+							],
+							"path": [
+								"ideas",
+								"idea",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Idea Review",
+			"item": [
+				{
+					"name": "Approve",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ydeas_url}}/ideas/idea_review/1/approve",
+							"host": [
+								"{{ydeas_url}}"
+							],
+							"path": [
+								"ideas",
+								"idea_review",
+								"1",
+								"approve"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Decline",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ydeas_url}}/ideas/idea_review/1/decline",
+							"host": [
+								"{{ydeas_url}}"
+							],
+							"path": [
+								"ideas",
+								"idea_review",
+								"1",
+								"decline"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Users Index",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ydeas_url}}/users/",
+							"host": [
+								"{{ydeas_url}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Files",
+			"item": [
+				{
+					"name": "Upload File",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "file_url"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{ydeas_url}}/files",
+							"host": [
+								"{{ydeas_url}}"
+							],
+							"path": [
+								"files"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Download File",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ydeas_url}}/files/filename.png",
+							"host": [
+								"{{ydeas_url}}"
+							],
+							"path": [
+								"files",
+								"filename.png"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete file",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{ydeas_url}}/files/filename.png",
+							"host": [
+								"{{ydeas_url}}"
+							],
+							"path": [
+								"files",
+								"filename.png"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Idea Rate",
+			"item": [
+				{
+					"name": "Like Idea",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ydeas_url}}/ideas/idea_rate/1/like",
+							"host": [
+								"{{ydeas_url}}"
+							],
+							"path": [
+								"ideas",
+								"idea_rate",
+								"1",
+								"like"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dislike Idea",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{ydeas_url}}/ideas/idea_rate/1/dislike",
+							"host": [
+								"{{ydeas_url}}"
+							],
+							"path": [
+								"ideas",
+								"idea_rate",
+								"1",
+								"dislike"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ideas Rating",
+			"item": [
+				{
+					"name": "Ideas Rating",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ydeas_url}}/ideas/idea_rating?page=1",
+							"host": [
+								"{{ydeas_url}}"
+							],
+							"path": [
+								"ideas",
+								"idea_rating"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "authUrl",
+				"value": "{{keycloack_url}}/realms/{{realm}}/protocol/openid-connect/auth",
+				"type": "string"
+			},
+			{
+				"key": "redirect_uri",
+				"value": "http://127.0.0.1:8080",
+				"type": "string"
+			},
+			{
+				"key": "clientSecret",
+				"value": "",
+				"type": "string"
+			},
+			{
+				"key": "grant_type",
+				"value": "authorization_code_with_pkce",
+				"type": "string"
+			},
+			{
+				"key": "refreshRequestParams",
+				"value": [],
+				"type": "any"
+			},
+			{
+				"key": "tokenRequestParams",
+				"value": [],
+				"type": "any"
+			},
+			{
+				"key": "authRequestParams",
+				"value": [],
+				"type": "any"
+			},
+			{
+				"key": "challengeAlgorithm",
+				"value": "S256",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "username",
+				"type": "string"
+			},
+			{
+				"key": "scope",
+				"value": "openid",
+				"type": "string"
+			},
+			{
+				"key": "password",
+				"value": "password",
+				"type": "string"
+			},
+			{
+				"key": "clientId",
+				"value": "{{client_id}}",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			},
+			{
+				"key": "client_authentication",
+				"value": "body",
+				"type": "string"
+			},
+			{
+				"key": "accessTokenUrl",
+				"value": "{{keycloack_url}}/realms/{{realm}}/protocol/openid-connect/token",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "keycloack_url",
+			"value": "http://localhost:8180",
+			"type": "string"
+		},
+		{
+			"key": "client_id",
+			"value": "ydeas-user",
+			"type": "string"
+		},
+		{
+			"key": "realm",
+			"value": "Ydeas",
+			"type": "string"
+		},
+		{
+			"key": "ydeas_url",
+			"value": "http://127.0.0.1:8080",
+			"type": "string"
+		}
+	]
+}
