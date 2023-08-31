@@ -1,10 +1,10 @@
 package com.diac.ydeas.ideas.service;
 
+import com.diac.ydeas.domain.dto.IdeaInputDto;
 import com.diac.ydeas.domain.exception.ResourceConstraintViolationException;
 import com.diac.ydeas.domain.exception.ResourceNotFoundException;
 import com.diac.ydeas.domain.exception.ResourceOwnershipViolationException;
 import com.diac.ydeas.domain.model.Idea;
-import com.diac.ydeas.domain.dto.IdeaInputDto;
 import com.diac.ydeas.ideas.repository.IdeaRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
@@ -67,6 +67,28 @@ public class IdeaJpaServiceTest {
         Mockito.when(ideaRepository.findAll(pageRequest)).thenReturn(expectedIdeaPage);
         assertThat(ideaService.getPage(pageRequest).getContent()).isEqualTo(expectedIdeas);
         Mockito.verify(ideaRepository).findAll(pageRequest);
+    }
+
+    @Test
+    public void whenGetPageByAuthorUuid() {
+        UUID uuid = UUID.randomUUID();
+        List<Idea> expectedIdeas = List.of(
+                Idea.builder()
+                        .id(1)
+                        .authorUuid(uuid)
+                        .build(),
+                Idea.builder()
+                        .id(2)
+                        .authorUuid(uuid)
+                        .build()
+        );
+        PageRequest pageRequest = PageRequest.of(0, 10);
+        Page<Idea> expectedIdeaPage = Mockito.mock(Page.class);
+        Mockito.when(expectedIdeaPage.getContent()).thenReturn(expectedIdeas);
+        Mockito.when(ideaRepository.findByAuthorUuid(uuid, pageRequest))
+                .thenReturn(expectedIdeaPage);
+        assertThat(ideaService.getPage(uuid, pageRequest).getContent()).containsAll(expectedIdeas);
+        Mockito.verify(ideaRepository).findByAuthorUuid(uuid, pageRequest);
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.diac.ydeas.ideas.service;
 
-import com.diac.ydeas.domain.model.Idea;
 import com.diac.ydeas.domain.dto.IdeaInputDto;
+import com.diac.ydeas.domain.model.Idea;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -27,6 +27,15 @@ public interface IdeaService {
      * @return Страница с идеями
      */
     Page<Idea> getPage(PageRequest pageRequest);
+
+    /**
+     * Получить страницу с идеями по UUID автора
+     *
+     * @param authorUuid UUID автора идей
+     * @param pageRequest pageRequest Объект PageRequest
+     * @return Страница с идеями
+     */
+    Page<Idea> getPage(UUID authorUuid, PageRequest pageRequest);
 
     /**
      * Найти идею по ID

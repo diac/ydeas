@@ -63,6 +63,18 @@ public class IdeaJpaService implements IdeaService {
     }
 
     /**
+     * Получить страницу с идеями по UUID автора
+     *
+     * @param authorUuid UUID автора идей
+     * @param pageRequest pageRequest Объект PageRequest
+     * @return Страница с идеями
+     */
+    @Override
+    public Page<Idea> getPage(UUID authorUuid, PageRequest pageRequest) {
+        return ideaRepository.findByAuthorUuid(authorUuid, pageRequest);
+    }
+
+    /**
      * Найти идею по ID
      *
      * @param id Идентификатор идеи
