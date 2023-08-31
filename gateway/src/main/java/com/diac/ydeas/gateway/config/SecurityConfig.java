@@ -81,6 +81,7 @@ public class SecurityConfig {
                     configuration.setAllowedHeaders(corsAllowedHeaders);
                     return configuration;
                 });
+        http.csrf().disable();
         // @formatter:on
         return http.build();
     }
