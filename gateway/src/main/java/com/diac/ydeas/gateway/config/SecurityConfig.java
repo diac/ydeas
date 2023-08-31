@@ -2,6 +2,7 @@ package com.diac.ydeas.gateway.config;
 
 import com.diac.ydeas.domain.enumeration.UserRole;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -10,7 +11,10 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.CorsConfiguration;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 /**
  * Конфигурация безопасности
@@ -24,6 +28,24 @@ public class SecurityConfig {
      * Шаблон пути к API оценки идей экспертами
      */
     private static final String IDEA_REVIEW_PATH_PATTERN = "/ideas/idea_review/**";
+
+    /**
+     * Перечень разрешенных доменов CORS
+     */
+    @Value("${cors.allowed-origins}")
+    private List<String> corsAllowedOrigins;
+
+    /**
+     * Перечень разрешенных методов CORS
+     */
+    @Value("${cors.allowed-methods}")
+    private List<String> corsAllowedMethods;
+
+    /**
+     * Перечень разрешенных заголовков CORS
+     */
+    @Value("${cors.allowed-headers}")
+    private List<String> corsAllowedHeaders;
 
     /**
      * Цепочка фильтров безопасности
@@ -49,8 +71,16 @@ public class SecurityConfig {
                 );
         http
                 .oauth2ResourceServer()
-                    .jwt()
-                    .jwtAuthenticationConverter(jwtAuthenticationConverter);
+                .jwt()
+                .jwtAuthenticationConverter(jwtAuthenticationConverter);
+        http
+                .cors().configurationSource(request -> {
+                    CorsConfiguration configuration = new CorsConfiguration();
+                    configuration.setAllowedOrigins(corsAllowedOrigins);
+                    configuration.setAllowedMethods(corsAllowedMethods);
+                    configuration.setAllowedHeaders(corsAllowedHeaders);
+                    return configuration;
+                });
         // @formatter:on
         return http.build();
     }
