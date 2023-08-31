@@ -3,6 +3,8 @@ package com.diac.ydeas.ideas.repository;
 import com.diac.ydeas.domain.model.Idea;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -44,6 +46,25 @@ public class IdeaRepositoryTest extends AbstractRepositoryIntegrationTest {
         Idea ideaInDb = ideaRepository.findById(idea.getId())
                 .orElse(new Idea());
         assertThat(ideaInDb).isEqualTo(idea);
+    }
+
+    @Test
+    public void whenFindByAuthorUuid() {
+        UUID uuid = UUID.randomUUID();
+        String value = String.valueOf(System.currentTimeMillis());
+        Idea idea = ideaRepository.save(
+                Idea.builder()
+                        .title(value)
+                        .description(value)
+                        .authorUuid(uuid)
+                        .createdAt(LocalDateTime.now())
+                        .build()
+        );
+        Page<Idea> ideaPage = ideaRepository.findByAuthorUuid(
+                uuid,
+                PageRequest.of(0, 10)
+        );
+        assertThat(ideaPage.getContent()).contains(idea);
     }
 
     @Test
