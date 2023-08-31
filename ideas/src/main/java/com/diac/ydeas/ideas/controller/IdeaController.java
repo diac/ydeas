@@ -1,7 +1,7 @@
 package com.diac.ydeas.ideas.controller;
 
-import com.diac.ydeas.domain.model.Idea;
 import com.diac.ydeas.domain.dto.IdeaInputDto;
+import com.diac.ydeas.domain.model.Idea;
 import com.diac.ydeas.ideas.service.IdeaService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -63,10 +63,31 @@ public class IdeaController {
     }
 
     /**
+     * Получить страницу с идеями автора-принципала
+     *
+     * @param pageNumber Номер страницы
+     * @param principal Объект Principal
+     * @return Страница с идеями
+     */
+    @GetMapping("/my_ideas")
+    public ResponseEntity<Page<Idea>> myIdeas(
+            @RequestParam(name = "page", required = false, defaultValue = "1") int pageNumber,
+            Principal principal
+    ) {
+        return new ResponseEntity<>(
+                ideaService.getPage(
+                        UUID.fromString(principal.getName()),
+                        PageRequest.of(pageNumber - 1, IDEAS_PER_PAGE)
+                ),
+                HttpStatus.OK
+        );
+    }
+
+    /**
      * Добавить новую идею в систему
      *
-     * @param ideaInputDto   DTO с данными новой идеи
-     * @param principal Объект Principal
+     * @param ideaInputDto DTO с данными новой идеи
+     * @param principal    Объект Principal
      * @return Ответ с созданной идеей
      */
     @PostMapping("")
@@ -86,9 +107,9 @@ public class IdeaController {
     /**
      * Обновить данные идеи
      *
-     * @param id             Идентификатор идеи
-     * @param ideaInputDto   DTO с обновленными данными идеи
-     * @param principal Объект Principal
+     * @param id           Идентификатор идеи
+     * @param ideaInputDto DTO с обновленными данными идеи
+     * @param principal    Объект Principal
      * @return Ответ с обновленной идеей
      */
     @PutMapping("/{id}")
@@ -110,7 +131,7 @@ public class IdeaController {
     /**
      * Удалить идею из системы
      *
-     * @param id             Идентификатор идеи
+     * @param id        Идентификатор идеи
      * @param principal Объект Principal
      * @return Тело ответа со статусом
      */

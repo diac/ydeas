@@ -71,6 +71,19 @@ public class IdeaControllerTest {
     }
 
     @Test
+    public void whenMyIdeas() throws Exception {
+        UUID uuid = UUID.randomUUID();
+        Principal principal = Mockito.mock(Principal.class);
+        Mockito.when(principal.getName()).thenReturn(uuid.toString());
+        String requestUrl = BASE_URL + "/my_ideas";
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get(requestUrl)
+                .principal(principal);
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void whenGetFound() throws Exception {
         int id = 1;
         Mockito.when(ideaService.findById(id))
