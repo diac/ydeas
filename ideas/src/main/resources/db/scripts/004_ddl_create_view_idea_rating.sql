@@ -32,7 +32,7 @@ FROM
         ) AS rating
     FROM
         idea AS Idea
-    INNER JOIN
+    LEFT JOIN
         idea_rate AS IdeaRate ON IdeaRate.idea_id = Idea.id
     GROUP BY
         Idea.id
