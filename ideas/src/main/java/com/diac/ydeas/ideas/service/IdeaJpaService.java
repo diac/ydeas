@@ -1,16 +1,15 @@
 package com.diac.ydeas.ideas.service;
 
+import com.diac.ydeas.domain.dto.IdeaInputDto;
 import com.diac.ydeas.domain.exception.ResourceConstraintViolationException;
 import com.diac.ydeas.domain.exception.ResourceNotFoundException;
 import com.diac.ydeas.domain.exception.ResourceOwnershipViolationException;
 import com.diac.ydeas.domain.model.Idea;
-import com.diac.ydeas.domain.dto.IdeaInputDto;
 import com.diac.ydeas.ideas.repository.IdeaRepository;
 import jakarta.validation.ConstraintViolationException;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +66,7 @@ public class IdeaJpaService implements IdeaService {
      * Получить страницу с идеями по UUID автора
      *
      * @param authorUuid UUID автора идей
-     * @param pageable Объект Pageable
+     * @param pageable   Объект Pageable
      * @return Страница с идеями
      */
     @Override
