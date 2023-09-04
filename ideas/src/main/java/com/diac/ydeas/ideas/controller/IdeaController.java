@@ -6,7 +6,6 @@ import com.diac.ydeas.ideas.service.IdeaService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,7 +63,7 @@ public class IdeaController {
     /**
      * Получить страницу с идеями автора-принципала
      *
-     * @param pageable Объект pageable
+     * @param pageable  Объект pageable
      * @param principal Объект Principal
      * @return Страница с идеями
      */

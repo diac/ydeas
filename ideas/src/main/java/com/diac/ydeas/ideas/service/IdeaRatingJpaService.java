@@ -4,7 +4,6 @@ import com.diac.ydeas.domain.model.IdeaRating;
 import com.diac.ydeas.ideas.repository.IdeaRatingRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

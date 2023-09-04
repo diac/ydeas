@@ -3,7 +3,6 @@ package com.diac.ydeas.ideas.service;
 import com.diac.ydeas.domain.dto.IdeaInputDto;
 import com.diac.ydeas.domain.model.Idea;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -33,7 +32,7 @@ public interface IdeaService {
      * Получить страницу с идеями по UUID автора
      *
      * @param authorUuid UUID автора идей
-     * @param pageable Объект Pageable
+     * @param pageable   Объект Pageable
      * @return Страница с идеями
      */
     Page<Idea> getPage(UUID authorUuid, Pageable pageable);
