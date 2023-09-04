@@ -5,6 +5,7 @@ import com.diac.ydeas.ideas.service.IdeaRatingService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +32,7 @@ public class IdeaRatingController {
      * @return Тело ответа с рейтинговым списком идей и статусом OK
      */
     @GetMapping("")
-    public ResponseEntity<Page<IdeaRating>> rating(Pageable pageable) {
+    public ResponseEntity<Page<IdeaRating>> rating(@PageableDefault Pageable pageable) {
         return new ResponseEntity<>(
                 ideaRatingService.rating(pageable),
                 HttpStatus.OK
