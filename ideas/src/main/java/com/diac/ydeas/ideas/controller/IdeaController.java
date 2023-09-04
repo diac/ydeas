@@ -23,11 +23,6 @@ import java.util.UUID;
 public class IdeaController {
 
     /**
-     * Количество идей на странице
-     */
-    private static final int IDEAS_PER_PAGE = 10;
-
-    /**
      * Сервис для работы с объектами Idea
      */
     private final IdeaService ideaService;
