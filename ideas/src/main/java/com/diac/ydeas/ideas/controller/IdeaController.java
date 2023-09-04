@@ -65,7 +65,7 @@ public class IdeaController {
      */
     @GetMapping("/my_ideas")
     public ResponseEntity<Page<Idea>> myIdeas(
-            Pageable pageable,
+            @PageableDefault Pageable pageable,
             Principal principal
     ) {
         return new ResponseEntity<>(
