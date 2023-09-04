@@ -5,6 +5,7 @@ import com.diac.ydeas.ideas.service.IdeaRatingService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/idea_rating")
 public class IdeaRatingController {
 
-    private static final int RATINGS_PER_PAGE = 20;
+    private static final int RATINGS_PER_PAGE = 2;
 
     /**
      * Сервис для работы с объектами IdeaRating
@@ -30,14 +31,13 @@ public class IdeaRatingController {
     /**
      * Получить рейтинговый список идей
      *
+     * @param pageable Объект Pageable
      * @return Тело ответа с рейтинговым списком идей и статусом OK
      */
     @GetMapping("")
-    public ResponseEntity<Page<IdeaRating>> rating(
-            @RequestParam(name = "page", required = false, defaultValue = "1") int pageNumber
-    ) {
+    public ResponseEntity<Page<IdeaRating>> rating(Pageable pageable) {
         return new ResponseEntity<>(
-                ideaRatingService.rating(PageRequest.of(pageNumber - 1, RATINGS_PER_PAGE)),
+                ideaRatingService.rating(pageable),
                 HttpStatus.OK
         );
     }

@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,15 +36,13 @@ public class IdeaController {
     /**
      * Получить все идеи
      *
-     * @param pageNumber Номер страницы
+     * @param pageable Объект Pageable
      * @return Страница с идеями
      */
     @GetMapping("")
-    public ResponseEntity<Page<Idea>> index(
-            @RequestParam(name = "page", required = false, defaultValue = "1") int pageNumber
-    ) {
+    public ResponseEntity<Page<Idea>> index(Pageable pageable) {
         return new ResponseEntity<>(
-                ideaService.getPage(PageRequest.of(pageNumber - 1, IDEAS_PER_PAGE)),
+                ideaService.getPage(pageable),
                 HttpStatus.OK
         );
     }
@@ -65,19 +64,19 @@ public class IdeaController {
     /**
      * Получить страницу с идеями автора-принципала
      *
-     * @param pageNumber Номер страницы
+     * @param pageable Объект pageable
      * @param principal Объект Principal
      * @return Страница с идеями
      */
     @GetMapping("/my_ideas")
     public ResponseEntity<Page<Idea>> myIdeas(
-            @RequestParam(name = "page", required = false, defaultValue = "1") int pageNumber,
+            Pageable pageable,
             Principal principal
     ) {
         return new ResponseEntity<>(
                 ideaService.getPage(
                         UUID.fromString(principal.getName()),
-                        PageRequest.of(pageNumber - 1, IDEAS_PER_PAGE)
+                        pageable
                 ),
                 HttpStatus.OK
         );

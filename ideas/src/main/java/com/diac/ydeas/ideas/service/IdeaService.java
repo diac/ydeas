@@ -4,6 +4,7 @@ import com.diac.ydeas.domain.dto.IdeaInputDto;
 import com.diac.ydeas.domain.model.Idea;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,19 +24,19 @@ public interface IdeaService {
     /**
      * Получить страницу с идеями
      *
-     * @param pageRequest Объект PageRequest
+     * @param pageable Объект Pageable
      * @return Страница с идеями
      */
-    Page<Idea> getPage(PageRequest pageRequest);
+    Page<Idea> getPage(Pageable pageable);
 
     /**
      * Получить страницу с идеями по UUID автора
      *
      * @param authorUuid UUID автора идей
-     * @param pageRequest pageRequest Объект PageRequest
+     * @param pageable Объект Pageable
      * @return Страница с идеями
      */
-    Page<Idea> getPage(UUID authorUuid, PageRequest pageRequest);
+    Page<Idea> getPage(UUID authorUuid, Pageable pageable);
 
     /**
      * Найти идею по ID

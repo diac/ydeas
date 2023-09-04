@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -54,24 +55,24 @@ public class IdeaJpaService implements IdeaService {
     /**
      * Получить страницу с идеями
      *
-     * @param pageRequest Объект PageRequest
+     * @param pageable Объект Pageable
      * @return Страница с идеями
      */
     @Override
-    public Page<Idea> getPage(PageRequest pageRequest) {
-        return ideaRepository.findAll(pageRequest);
+    public Page<Idea> getPage(Pageable pageable) {
+        return ideaRepository.findAll(pageable);
     }
 
     /**
      * Получить страницу с идеями по UUID автора
      *
      * @param authorUuid UUID автора идей
-     * @param pageRequest pageRequest Объект PageRequest
+     * @param pageable Объект Pageable
      * @return Страница с идеями
      */
     @Override
-    public Page<Idea> getPage(UUID authorUuid, PageRequest pageRequest) {
-        return ideaRepository.findByAuthorUuid(authorUuid, pageRequest);
+    public Page<Idea> getPage(UUID authorUuid, Pageable pageable) {
+        return ideaRepository.findByAuthorUuid(authorUuid, pageable);
     }
 
     /**
