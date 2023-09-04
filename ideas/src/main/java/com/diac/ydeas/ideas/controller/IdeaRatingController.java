@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/idea_rating")
 public class IdeaRatingController {
 
-    private static final int RATINGS_PER_PAGE = 2;
-
     /**
      * Сервис для работы с объектами IdeaRating
      */
