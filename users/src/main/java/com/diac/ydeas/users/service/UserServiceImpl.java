@@ -1,6 +1,7 @@
 package com.diac.ydeas.users.service;
 
 import com.diac.ydeas.domain.enumeration.UserRole;
+import com.diac.ydeas.domain.exception.ResourceNotFoundException;
 import com.diac.ydeas.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
@@ -19,6 +20,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
+    /**
+     * Шаблон сообщения о том, что пользователь не найден
+     */
+    private static final String USER_DOES_NOT_EXIST_MESSAGE = "User %s does not exist";
 
     /**
      * Бин Keycloak
@@ -70,5 +76,20 @@ public class UserServiceImpl implements UserService {
                                     .build();
                         }
                 ).collect(Collectors.toList());
+    }
+
+    /**
+     * Найти пользователя по UUID
+     *
+     * @param uuid UUID пользователя
+     * @return пользователь
+     */
+    @Override
+    public User findByUuid(UUID uuid) {
+        final RealmResource realmResource = keycloak.realm(realmName);
+        return findAll().stream()
+                .filter(user -> user.getUuid().equals(uuid))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(USER_DOES_NOT_EXIST_MESSAGE, uuid)));
     }
 }
