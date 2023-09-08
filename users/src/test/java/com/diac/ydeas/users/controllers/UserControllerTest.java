@@ -53,4 +53,18 @@ public class UserControllerTest {
                 get(BASE_URL)
         ).andExpect(status().isOk());
     }
+
+    @Test
+    public void whenFindByUuid() throws Exception {
+        UUID uuid = UUID.randomUUID();
+        Mockito.when(userService.findByUuid(uuid)).thenReturn(
+                User.builder()
+                        .uuid(uuid)
+                        .build()
+        );
+        String requestUrl = String.format("%s/%s", BASE_URL, uuid);
+        mockMvc.perform(
+                get(requestUrl)
+        ).andExpect(status().isOk());
+    }
 }
