@@ -1,6 +1,7 @@
 package com.diac.ydeas.domain.model;
 
 import com.diac.ydeas.domain.enumeration.IdeaStatus;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -33,6 +34,7 @@ public class IdeaReview {
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "idea_id")
     @MapsId
+    @JsonBackReference
     private Idea idea;
 
     /**

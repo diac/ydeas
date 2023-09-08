@@ -1,5 +1,6 @@
 package com.diac.ydeas.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -56,6 +57,14 @@ public class Idea {
      */
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "ideaRateId.idea")
+    @JsonManagedReference
+    private Set<IdeaRate> ideaRates;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "idea")
+    @JsonManagedReference
+    private IdeaReview ideaReview;
 
     @ManyToMany
     @JoinTable(
