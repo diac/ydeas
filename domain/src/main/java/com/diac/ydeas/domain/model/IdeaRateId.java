@@ -1,5 +1,6 @@
 package com.diac.ydeas.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
@@ -26,6 +27,7 @@ public class IdeaRateId implements Serializable {
     @ManyToOne
     @JoinColumn(name = "idea_id")
     @EqualsAndHashCode.Include
+    @JsonBackReference
     private Idea idea;
 
     /**
