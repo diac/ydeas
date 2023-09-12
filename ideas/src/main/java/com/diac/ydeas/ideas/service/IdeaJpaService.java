@@ -138,7 +138,6 @@ public class IdeaJpaService implements IdeaService {
             }
             idea.setTitle(ideaInputDto.getTitle());
             idea.setDescription(ideaInputDto.getDescription());
-            idea.setAttachments(ideaInputDto.getAttachments());
             return ideaRepository.save(idea);
         } catch (DataIntegrityViolationException | ConstraintViolationException e) {
             throw new ResourceConstraintViolationException(e.getMessage());
