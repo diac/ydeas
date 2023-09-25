@@ -24,6 +24,7 @@
 оценках идей и т.д. Взаимодействие с этим сервисом осуществляется через Kafka.
 5. Gateway -- сервис-шлюз, через который осуществляется доступ в экосистему проекта извне.
 6. Eureka Server -- сервис для регистрации и обнаружения сервисов внутри экосистемы.
+7. Config Server -- сервис для эктернализации настроек сервисов.
 
 ## Особенности реализации
 В проекте используется микросервисная архитектура.<br>
@@ -48,6 +49,7 @@
 - Spring Security
 - Spring Cloud 2022.0.1
 - Netflix Eureka
+- Spring Cloud Config Server
 - Keycloak
 - Apache Kafka
 - Amazon S3
@@ -92,6 +94,18 @@ CREATE DATABASE ydeas_notifications;
 выполнив файл commands.sh в директории db проекта.
 ```shell
 ./commands.sh
+```
+
+## Конфигурация сервисов через Spring Cloud Config Server
+Конфигурацию сервисов данного проекта можно экстернализировать с помощью Spring Cloud Config Server.
+Для этого в файле настроек для соответствующего профиля (application-<profile_name>.yml) 
+необходимо указать URL сервера конфигурации:
+```
+spring:
+  cloud:
+    config:
+      uri:
+        - http://localhost:8888
 ```
 
 ## Контакты
