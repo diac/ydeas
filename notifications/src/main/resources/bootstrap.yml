@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: NOTIFICATIONS
+  profiles:
+    active: @spring.profiles.active@
+  cloud:
+    config:
+      name: ${spring.application.name}
+      profile: @spring.profiles.active@
