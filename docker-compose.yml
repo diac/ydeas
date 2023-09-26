@@ -18,6 +18,19 @@ services:
     networks:
       - ydeas_local
 
+  ### Config Server ###
+  app-config-server:
+    image: ndiac/ydeas_config_server
+    build:
+      context: .
+      dockerfile: config-server/Dockerfile
+    container_name: ydeas_config_server
+    environment:
+      - spring.application.name=CONFIG-SERVER
+      - spring.profiles.active=prod
+    networks:
+      - ydeas_local
+
   ### Files ###
   app-files:
     image: ndiac/ydeas_files
