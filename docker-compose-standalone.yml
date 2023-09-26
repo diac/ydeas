@@ -92,6 +92,21 @@ services:
     networks:
       - ydeas_local
 
+  ### Config Server ###
+  app-config-server:
+    image: ndiac/ydeas_config_server
+    build:
+      context: .
+      dockerfile: config-server/Dockerfile
+    container_name: ydeas_config_server
+    environment:
+      - spring.application.name=CONFIG-SERVER
+      - spring.profiles.active=prod
+    ports:
+      - "8888:8888"
+    networks:
+      - ydeas_local
+
   ### Files ###
   app-files:
     image: ndiac/ydeas_files
@@ -102,6 +117,7 @@ services:
     environment:
       - spring.application.name=FILES
       - spring.profiles.active=prod
+      - spring.cloud.config.uri=http://app-config-server:8888
       - eureka.client.serviceUrl.defaultZone=http://app-eureka-server:8761/eureka/
       - s3.host.name=${S3_HOST_NAME}
       - s3.region.name=${S3_HOST_REGION}
@@ -123,6 +139,7 @@ services:
     environment:
       - spring.application.name=IDEAS
       - spring.profiles.active=prod
+      - spring.cloud.config.uri=http://app-config-server:8888
       - eureka.client.serviceUrl.defaultZone=http://app-eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db-ydeas:5432/ydeas_ideas
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USERNAME}
@@ -148,6 +165,7 @@ services:
     environment:
       - spring.application.name=NOTIFICATIONS
       - spring.profiles.active=prod
+      - spring.cloud.config.uri=http://app-config-server:8888
       - eureka.client.serviceUrl.defaultZone=http://app-eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db-ydeas:5432/ydeas_notifications
       - SPRING_DATASOURCE_USERNAME=${POSTGRES_USERNAME}
@@ -171,6 +189,7 @@ services:
     environment:
       - spring.application.name=USERS
       - spring.profiles.active=prod
+      - spring.cloud.config.uri=http://app-config-server:8888
       - eureka.client.serviceUrl.defaultZone=http://app-eureka-server:8761/eureka/
       - keycloak.serverUrl=http://keycloak:8180
       - keycloak.realmName=${KEYCLOAK_REALM_NAME}
@@ -191,6 +210,7 @@ services:
     environment:
       - spring.application.name=GATEWAY
       - spring.profiles.active=prod
+      - spring.cloud.config.uri=http://app-config-server:8888
       - spring.security.oauth2.resourceserver.jwt.issuer-uri=http://keycloak:8180/realms/${KEYCLOAK_REALM_NAME}
       - eureka.client.serviceUrl.defaultZone=http://app-eureka-server:8761/eureka/
     ports:
@@ -203,3 +223,4 @@ services:
       - app-ideas
       - app-notifications
       - app-users
+      - app-config-server

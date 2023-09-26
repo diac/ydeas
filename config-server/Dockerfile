@@ -4,7 +4,7 @@ ENV HOME=/usr/app
 RUN mkdir -p $HOME
 WORKDIR $HOME
 ADD . $HOME
-RUN --mount=type=cache,target=/root/.m2 mvn -f $HOME/pom.xml --projects configserver clean package -P prod
+RUN --mount=type=cache,target=/root/.m2 mvn -f $HOME/pom.xml --projects config-server clean package -P prod
 
 # Launch the app
 FROM openjdk:17.0.2-jdk
