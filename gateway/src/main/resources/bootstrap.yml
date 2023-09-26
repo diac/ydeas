@@ -5,5 +5,5 @@ spring:
     active: @spring.profiles.active@
   cloud:
     config:
-      name: ${spring.application.name}
+      name: gateway
       profile: @spring.profiles.active@
