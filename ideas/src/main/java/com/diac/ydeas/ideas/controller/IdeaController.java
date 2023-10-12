@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -35,25 +34,19 @@ public class IdeaController {
      * @return Страница с идеями
      */
     @GetMapping("")
-    public ResponseEntity<Page<Idea>> index(@PageableDefault Pageable pageable) {
-        return new ResponseEntity<>(
-                ideaService.getPage(pageable),
-                HttpStatus.OK
-        );
+    public Page<Idea> index(@PageableDefault Pageable pageable) {
+        return ideaService.getPage(pageable);
     }
 
     /**
      * Получить идею по UD
      *
      * @param id Идентификатор идеи
-     * @return Ответ с идеей и статусом OK
+     * @return Идея
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Idea> getById(@PathVariable("id") int id) {
-        return new ResponseEntity<>(
-                ideaService.findById(id),
-                HttpStatus.OK
-        );
+    public Idea getById(@PathVariable("id") int id) {
+        return ideaService.findById(id);
     }
 
     /**
@@ -64,16 +57,13 @@ public class IdeaController {
      * @return Страница с идеями
      */
     @GetMapping("/my_ideas")
-    public ResponseEntity<Page<Idea>> myIdeas(
+    public Page<Idea> myIdeas(
             @PageableDefault Pageable pageable,
             Principal principal
     ) {
-        return new ResponseEntity<>(
-                ideaService.getPage(
-                        UUID.fromString(principal.getName()),
-                        pageable
-                ),
-                HttpStatus.OK
+        return ideaService.getPage(
+                UUID.fromString(principal.getName()),
+                pageable
         );
     }
 
@@ -82,19 +72,17 @@ public class IdeaController {
      *
      * @param ideaInputDto DTO с данными новой идеи
      * @param principal    Объект Principal
-     * @return Ответ с созданной идеей
+     * @return Созданная идея
      */
     @PostMapping("")
-    public ResponseEntity<Idea> post(
+    @ResponseStatus(HttpStatus.CREATED)
+    public Idea post(
             @RequestBody @Valid IdeaInputDto ideaInputDto,
             Principal principal
     ) {
-        return new ResponseEntity<>(
-                ideaService.add(
-                        ideaInputDto,
-                        UUID.fromString(principal.getName())
-                ),
-                HttpStatus.CREATED
+        return ideaService.add(
+                ideaInputDto,
+                UUID.fromString(principal.getName())
         );
     }
 
@@ -104,21 +92,18 @@ public class IdeaController {
      * @param id           Идентификатор идеи
      * @param ideaInputDto DTO с обновленными данными идеи
      * @param principal    Объект Principal
-     * @return Ответ с обновленной идеей
+     * @return Обновленная идея
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Idea> put(
+    public Idea put(
             @PathVariable("id") int id,
             @RequestBody @Valid IdeaInputDto ideaInputDto,
             Principal principal
     ) {
-        return new ResponseEntity<>(
-                ideaService.update(
-                        id,
-                        ideaInputDto,
-                        UUID.fromString(principal.getName())
-                ),
-                HttpStatus.OK
+        return ideaService.update(
+                id,
+                ideaInputDto,
+                UUID.fromString(principal.getName())
         );
     }
 
@@ -127,14 +112,12 @@ public class IdeaController {
      *
      * @param id        Идентификатор идеи
      * @param principal Объект Principal
-     * @return Тело ответа со статусом
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") int id, Principal principal) {
+    public void delete(@PathVariable("id") int id, Principal principal) {
         ideaService.delete(
                 id,
                 UUID.fromString(principal.getName())
         );
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
