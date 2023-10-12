@@ -2,8 +2,6 @@ package com.diac.ydeas.ideas.controller;
 
 import com.diac.ydeas.ideas.service.IdeaReviewService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,15 +28,13 @@ public class IdeaReviewController {
      *
      * @param ideaId    Идентификатор идеи
      * @param principal Объект Principal
-     * @return Тело ответа со статусом OK
      */
     @PostMapping("/{idea_id}/approve")
-    public ResponseEntity<Void> approve(
+    public void approve(
             @PathVariable("idea_id") int ideaId,
             Principal principal
     ) {
         ideaReviewService.approve(ideaId, UUID.fromString(principal.getName()));
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -46,14 +42,12 @@ public class IdeaReviewController {
      *
      * @param ideaId    Идентификатор идеи
      * @param principal Объект Principal
-     * @return Тело ответа со статусом OK
      */
     @PostMapping("/{idea_id}/decline")
-    public ResponseEntity<Void> decline(
+    public void decline(
             @PathVariable("idea_id") int ideaId,
             Principal principal
     ) {
         ideaReviewService.decline(ideaId, UUID.fromString(principal.getName()));
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
