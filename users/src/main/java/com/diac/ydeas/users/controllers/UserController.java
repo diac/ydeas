@@ -3,7 +3,6 @@ package com.diac.ydeas.users.controllers;
 import com.diac.ydeas.domain.model.User;
 import com.diac.ydeas.users.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,25 +27,23 @@ public class UserController {
     /**
      * Получить список всех пользователей
      *
-     * @return Тело ответа со списком пользователей
+     * @return Список пользователей
      */
     @GetMapping("")
-    public ResponseEntity<List<User>> findAll() {
-        return ResponseEntity.ok()
-                .body(userService.findAll());
+    public List<User> findAll() {
+        return userService.findAll();
     }
 
     /**
      * Найти пользователя по UUID
      *
      * @param uuid UUID пользователя
-     * @return пользователь
+     * @return Пользователь
      */
     @GetMapping("/{uuid}")
-    public ResponseEntity<User> findByUuid(
+    public User findByUuid(
             @PathVariable("uuid") UUID uuid
     ) {
-        return ResponseEntity.ok()
-                .body(userService.findByUuid(uuid));
+        return userService.findByUuid(uuid);
     }
 }
