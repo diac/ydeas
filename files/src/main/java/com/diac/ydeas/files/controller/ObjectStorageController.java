@@ -27,11 +27,11 @@ public class ObjectStorageController {
      * Загрузить объект в хранилище
      *
      * @param multipartFile загружаемый объект
+     * @return Загруженный объект
      */
     @PostMapping("")
-    public ResponseEntity<StoredObjectDetailsDto> upload(@RequestParam("file") MultipartFile multipartFile) {
-        return ResponseEntity.ok()
-                .body(objectStorageService.upload(multipartFile));
+    public StoredObjectDetailsDto upload(@RequestParam("file") MultipartFile multipartFile) {
+        return objectStorageService.upload(multipartFile);
     }
 
     /**
@@ -52,11 +52,9 @@ public class ObjectStorageController {
      * Удалить файл из хранилища
      *
      * @param fileName Имя файла
-     * @return Тело ответа со статусом
      */
     @DeleteMapping("/{fileName}")
-    public ResponseEntity<Void> delete(@PathVariable("fileName") String fileName) {
+    public void delete(@PathVariable("fileName") String fileName) {
         objectStorageService.delete(fileName);
-        return ResponseEntity.ok().build();
     }
 }
