@@ -53,11 +53,10 @@ public class MediaObjectController {
      * Прикрепить медиа объект к идее
      *
      * @param ideaMediaObjectAssociationDto DTO для определения связи между идеей и медиа-объектом
-     * @param principal     Объект Principal
-     * @return Тело ответа со статусом
+     * @param principal                     Объект Principal
      */
     @PostMapping(value = "/idea_attachment", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> associateWithIdea(
+    public void associateWithIdea(
             @RequestBody IdeaMediaObjectAssociationDto ideaMediaObjectAssociationDto,
             Principal principal
     ) {
@@ -66,18 +65,16 @@ public class MediaObjectController {
                 ideaMediaObjectAssociationDto.ideaId(),
                 UUID.fromString(principal.getName())
         );
-        return ResponseEntity.ok().build();
     }
 
     /**
      * Открепить медиа объект от идеи
      *
      * @param ideaMediaObjectAssociationDto DTO для определения связи между идеей и медиа-объектом
-     * @param principal     Объект Principal
-     * @return Тело ответа со статусом
+     * @param principal                     Объект Principal
      */
     @DeleteMapping("/idea_attachment")
-    public ResponseEntity<Void> dissociateWithIdea(
+    public void dissociateWithIdea(
             @RequestBody IdeaMediaObjectAssociationDto ideaMediaObjectAssociationDto,
             Principal principal
     ) {
@@ -86,6 +83,5 @@ public class MediaObjectController {
                 ideaMediaObjectAssociationDto.ideaId(),
                 UUID.fromString(principal.getName())
         );
-        return ResponseEntity.ok().build();
     }
 }
