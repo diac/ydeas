@@ -2,29 +2,22 @@ package com.diac.ydeas.ideas.controller;
 
 import com.diac.ydeas.domain.dto.IdeaMediaObjectAssociationDto;
 import com.diac.ydeas.domain.model.MediaObject;
-import com.diac.ydeas.ideas.service.MediaObjectService;
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.net.URI;
 import java.security.Principal;
-import java.util.UUID;
 
 /**
  * Контроллер, реализующий операции с объектами модели MediaObject
  */
-@RestController
-@AllArgsConstructor
-@RequestMapping("/media")
-public class MediaObjectController {
-
-    /**
-     * Сервис для работы с объектами модели ProductImage
-     */
-    private final MediaObjectService mediaObjectService;
+@Tag(name = "MediaObjectController", description = "Контроллер, реализующий операции с объектами модели MediaObject")
+public interface MediaObjectController {
 
     /**
      * Загрузить файл для идеи
@@ -35,19 +28,12 @@ public class MediaObjectController {
      * @return Тело ответа с прикрепленным медиа объектом
      */
     @PostMapping("/upload_for_idea/{ideaId}")
-    public ResponseEntity<MediaObject> uploadForIdea(
-            @RequestParam("file") MultipartFile multipartFile,
-            @PathVariable("ideaId") int ideaId,
-            Principal principal
-    ) {
-        MediaObject mediaObject = mediaObjectService.uploadFileForIdea(
-                multipartFile,
-                ideaId,
-                UUID.fromString(principal.getName())
-        );
-        return ResponseEntity.created(URI.create(mediaObject.getUrl()))
-                .body(mediaObject);
-    }
+    @Operation(summary = "Загрузить файл для идеи")
+    ResponseEntity<MediaObject> uploadForIdea(
+            @Parameter(description = "Файл") MultipartFile multipartFile,
+            @Parameter(description = "Идентификатор идеи") int ideaId,
+            @Parameter(description = "Объект Principal") Principal principal
+    );
 
     /**
      * Прикрепить медиа объект к идее
@@ -56,16 +42,11 @@ public class MediaObjectController {
      * @param principal                     Объект Principal
      */
     @PostMapping(value = "/idea_attachment", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void associateWithIdea(
-            @RequestBody IdeaMediaObjectAssociationDto ideaMediaObjectAssociationDto,
-            Principal principal
-    ) {
-        mediaObjectService.associateWithIdea(
-                ideaMediaObjectAssociationDto.mediaObjectId(),
-                ideaMediaObjectAssociationDto.ideaId(),
-                UUID.fromString(principal.getName())
-        );
-    }
+    @Operation(summary = "Прикрепить медиа объект к идее")
+    void associateWithIdea(
+            @Parameter(description = "DTO для определения связи между идеей и медиа-объектом") IdeaMediaObjectAssociationDto ideaMediaObjectAssociationDto,
+            @Parameter(description = "Объект Principal") Principal principal
+    );
 
     /**
      * Открепить медиа объект от идеи
@@ -74,14 +55,9 @@ public class MediaObjectController {
      * @param principal                     Объект Principal
      */
     @DeleteMapping("/idea_attachment")
-    public void dissociateWithIdea(
-            @RequestBody IdeaMediaObjectAssociationDto ideaMediaObjectAssociationDto,
-            Principal principal
-    ) {
-        mediaObjectService.dissociateWithIdea(
-                ideaMediaObjectAssociationDto.mediaObjectId(),
-                ideaMediaObjectAssociationDto.ideaId(),
-                UUID.fromString(principal.getName())
-        );
-    }
+    @Operation(summary = "Открепить медиа объект от идеи")
+    void dissociateWithIdea(
+            @Parameter(description = "DTO для определения связи между идеей и медиа-объектом") IdeaMediaObjectAssociationDto ideaMediaObjectAssociationDto,
+            @Parameter(description = "Объект Principal") Principal principal
+    );
 }

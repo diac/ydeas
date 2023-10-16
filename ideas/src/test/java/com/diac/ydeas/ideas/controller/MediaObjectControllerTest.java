@@ -26,7 +26,7 @@ import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(MediaObjectController.class)
+@WebMvcTest(MediaObjectControllerImpl.class)
 @AutoConfigureMockMvc
 public class MediaObjectControllerTest {
 
