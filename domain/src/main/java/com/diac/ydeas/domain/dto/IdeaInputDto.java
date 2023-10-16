@@ -1,6 +1,7 @@
 package com.diac.ydeas.domain.dto;
 
 import com.diac.ydeas.domain.model.MediaObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(description = "DTO для ввода идей в систему")
 public class IdeaInputDto {
 
     /**
@@ -25,6 +27,7 @@ public class IdeaInputDto {
      */
     @NotNull(message = "Idea title is required")
     @NotBlank(message = "Idea title cannot be blank")
+    @Schema(description = "Заголовок идеи", example = "My Idea")
     private String title;
 
     /**
@@ -32,6 +35,7 @@ public class IdeaInputDto {
      */
     @NotNull(message = "Idea description is required")
     @NotBlank(message = "Idea description cannot be blank")
+    @Schema(description = "Описание идеи", example = "Lorem ipsum")
     private String description;
 
     /**
