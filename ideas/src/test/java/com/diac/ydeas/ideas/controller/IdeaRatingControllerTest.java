@@ -14,7 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(IdeaRatingController.class)
+@WebMvcTest(IdeaRatingControllerImpl.class)
 @AutoConfigureMockMvc
 public class IdeaRatingControllerTest {
 

@@ -1,27 +1,18 @@
 package com.diac.ydeas.ideas.controller;
 
 import com.diac.ydeas.domain.model.IdeaRating;
-import com.diac.ydeas.ideas.service.IdeaRatingService;
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Контроллер, реализующий доступ к объектам модели IdeaRating
  */
-@RestController
-@AllArgsConstructor
-@RequestMapping("/idea_rating")
-public class IdeaRatingController {
-
-    /**
-     * Сервис для работы с объектами IdeaRating
-     */
-    private final IdeaRatingService ideaRatingService;
+@Tag(name = "IdeaRatingController", description = "Контроллер, реализующий доступ к объектам модели IdeaRating")
+public interface IdeaRatingController {
 
     /**
      * Получить рейтинговый список идей
@@ -30,7 +21,6 @@ public class IdeaRatingController {
      * @return Рейтинговый список идей
      */
     @GetMapping("")
-    public Page<IdeaRating> rating(@PageableDefault Pageable pageable) {
-        return ideaRatingService.rating(pageable);
-    }
+    @Operation(summary = "Получить рейтинговый список идей")
+    Page<IdeaRating> rating(@Parameter(description = "Объект Pageable") Pageable pageable);
 }
