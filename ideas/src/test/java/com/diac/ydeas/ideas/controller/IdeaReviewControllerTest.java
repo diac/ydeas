@@ -22,7 +22,7 @@ import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(IdeaReviewController.class)
+@WebMvcTest(IdeaReviewControllerImpl.class)
 @AutoConfigureMockMvc
 public class IdeaReviewControllerTest {
 

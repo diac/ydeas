@@ -1,27 +1,17 @@
 package com.diac.ydeas.ideas.controller;
 
-import com.diac.ydeas.ideas.service.IdeaReviewService;
-import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.PathVariable;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.UUID;
 
 /**
  * Контроллер, реализующий доступ к объектам модели IdeaReview
  */
-@RestController
-@AllArgsConstructor
-@RequestMapping("/idea_review")
-public class IdeaReviewController {
-
-    /**
-     * Сервис для работы с объектами IdeaReview
-     */
-    private final IdeaReviewService ideaReviewService;
+@Tag(name = "IdeaReviewController", description = "Контроллер, реализующий доступ к объектам модели IdeaReview")
+public interface IdeaReviewController {
 
     /**
      * Одобрить идею
@@ -30,12 +20,11 @@ public class IdeaReviewController {
      * @param principal Объект Principal
      */
     @PostMapping("/{idea_id}/approve")
-    public void approve(
-            @PathVariable("idea_id") int ideaId,
-            Principal principal
-    ) {
-        ideaReviewService.approve(ideaId, UUID.fromString(principal.getName()));
-    }
+    @Operation(summary = "Одобрить идею")
+    void approve(
+            @Parameter(description = "Идентификатор идеи") int ideaId,
+            @Parameter(description = "Объект Principal") Principal principal
+    );
 
     /**
      * Отклонить идею
@@ -44,10 +33,9 @@ public class IdeaReviewController {
      * @param principal Объект Principal
      */
     @PostMapping("/{idea_id}/decline")
-    public void decline(
-            @PathVariable("idea_id") int ideaId,
-            Principal principal
-    ) {
-        ideaReviewService.decline(ideaId, UUID.fromString(principal.getName()));
-    }
+    @Operation(summary = "Отклонить идею")
+    void decline(
+            @Parameter(description = "Идентификатор идеи") int ideaId,
+            @Parameter(description = "Объект Principal") Principal principal
+    );
 }
