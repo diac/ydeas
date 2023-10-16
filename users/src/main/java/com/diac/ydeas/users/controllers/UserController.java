@@ -1,12 +1,10 @@
 package com.diac.ydeas.users.controllers;
 
 import com.diac.ydeas.domain.model.User;
-import com.diac.ydeas.users.service.UserService;
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,15 +12,8 @@ import java.util.UUID;
 /**
  * Контроллер, реализующий доступ к объектам модели User
  */
-@RestController
-@RequestMapping("")
-@AllArgsConstructor
-public class UserController {
-
-    /**
-     * Сервис для работы с объектами User
-     */
-    private final UserService userService;
+@Tag(name = "UserController", description = "Контроллер, реализующий доступ к объектам модели User")
+public interface UserController {
 
     /**
      * Получить список всех пользователей
@@ -30,9 +21,8 @@ public class UserController {
      * @return Список пользователей
      */
     @GetMapping("")
-    public List<User> findAll() {
-        return userService.findAll();
-    }
+    @Operation(summary = "Получить список всех пользователей")
+    List<User> findAll();
 
     /**
      * Найти пользователя по UUID
@@ -41,9 +31,8 @@ public class UserController {
      * @return Пользователь
      */
     @GetMapping("/{uuid}")
-    public User findByUuid(
-            @PathVariable("uuid") UUID uuid
-    ) {
-        return userService.findByUuid(uuid);
-    }
+    @Operation(summary = "Найти пользователя по UUID")
+    User findByUuid(
+            @Parameter(description = "UUID пользователя") UUID uuid
+    );
 }

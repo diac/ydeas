@@ -19,7 +19,7 @@ import java.util.UUID;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(UserController.class)
+@WebMvcTest(UserControllerImpl.class)
 @AutoConfigureMockMvc
 public class UserControllerTest {
 
