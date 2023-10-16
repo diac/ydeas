@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(IdeaController.class)
+@WebMvcTest(IdeaControllerImpl.class)
 @AutoConfigureMockMvc
 public class IdeaControllerTest {
 

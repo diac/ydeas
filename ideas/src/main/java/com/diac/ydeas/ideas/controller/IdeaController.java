@@ -2,30 +2,21 @@ package com.diac.ydeas.ideas.controller;
 
 import com.diac.ydeas.domain.dto.IdeaInputDto;
 import com.diac.ydeas.domain.model.Idea;
-import com.diac.ydeas.ideas.service.IdeaService;
-import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.UUID;
 
 /**
  * Контроллер, реализующий доступ к объектам модели Idea
  */
-@RestController
-@AllArgsConstructor
-@RequestMapping("/idea")
-public class IdeaController {
-
-    /**
-     * Сервис для работы с объектами Idea
-     */
-    private final IdeaService ideaService;
+@Tag(name = "IdeaController", description = "Контроллер, реализующий доступ к объектам модели Idea")
+public interface IdeaController {
 
     /**
      * Получить все идеи
@@ -34,38 +25,32 @@ public class IdeaController {
      * @return Страница с идеями
      */
     @GetMapping("")
-    public Page<Idea> index(@PageableDefault Pageable pageable) {
-        return ideaService.getPage(pageable);
-    }
+    @Operation(summary = "Получить все идеи")
+    Page<Idea> index(@Parameter(description = "Объект Pageable") Pageable pageable);
 
     /**
-     * Получить идею по UD
+     * Получить идею по ID
      *
      * @param id Идентификатор идеи
      * @return Идея
      */
     @GetMapping("/{id}")
-    public Idea getById(@PathVariable("id") int id) {
-        return ideaService.findById(id);
-    }
+    @Operation(summary = "Получить идею по ID")
+    Idea getById(@Parameter(description = "Идентификатор идеи") int id);
 
     /**
      * Получить страницу с идеями автора-принципала
      *
-     * @param pageable  Объект pageable
+     * @param pageable  Объект Pageable
      * @param principal Объект Principal
      * @return Страница с идеями
      */
     @GetMapping("/my_ideas")
-    public Page<Idea> myIdeas(
-            @PageableDefault Pageable pageable,
-            Principal principal
-    ) {
-        return ideaService.getPage(
-                UUID.fromString(principal.getName()),
-                pageable
-        );
-    }
+    @Operation(summary = "Получить страницу с идеями автора-принципала")
+    Page<Idea> myIdeas(
+            @Parameter(description = "Объект Pageable") Pageable pageable,
+            @Parameter(description = "Объект Principal") Principal principal
+    );
 
     /**
      * Добавить новую идею в систему
@@ -76,15 +61,11 @@ public class IdeaController {
      */
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public Idea post(
-            @RequestBody @Valid IdeaInputDto ideaInputDto,
-            Principal principal
-    ) {
-        return ideaService.add(
-                ideaInputDto,
-                UUID.fromString(principal.getName())
-        );
-    }
+    @Operation(summary = "Добавить новую идею в систему")
+    Idea post(
+            @Parameter(description = "DTO с данными новой идеи") IdeaInputDto ideaInputDto,
+            @Parameter(description = "Объект Principal") Principal principal
+    );
 
     /**
      * Обновить данные идеи
@@ -95,17 +76,12 @@ public class IdeaController {
      * @return Обновленная идея
      */
     @PutMapping("/{id}")
-    public Idea put(
-            @PathVariable("id") int id,
-            @RequestBody @Valid IdeaInputDto ideaInputDto,
-            Principal principal
-    ) {
-        return ideaService.update(
-                id,
-                ideaInputDto,
-                UUID.fromString(principal.getName())
-        );
-    }
+    @Operation(summary = "Обновить данные идеи")
+    Idea put(
+            @Parameter(description = "Идентификатор идеи") int id,
+            @Parameter(description = "DTO с обновленными данными идеи") IdeaInputDto ideaInputDto,
+            @Parameter(description = "Объект Principal") Principal principal
+    );
 
     /**
      * Удалить идею из системы
@@ -114,10 +90,6 @@ public class IdeaController {
      * @param principal Объект Principal
      */
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") int id, Principal principal) {
-        ideaService.delete(
-                id,
-                UUID.fromString(principal.getName())
-        );
-    }
+    @Operation(summary = "Идентификатор идеи")
+    void delete(@Parameter(description = "Объект Principal") int id, Principal principal);
 }
