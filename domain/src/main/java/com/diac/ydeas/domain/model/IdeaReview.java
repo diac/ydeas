@@ -2,6 +2,7 @@ package com.diac.ydeas.domain.model;
 
 import com.diac.ydeas.domain.enumeration.IdeaStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Builder
+@Schema(description = "Модель данных \"Рассмотрение идеи\"")
 public class IdeaReview {
 
     /**
@@ -26,6 +28,7 @@ public class IdeaReview {
     @Id
     @EqualsAndHashCode.Include
     @Column(name = "idea_id")
+    @Schema(description = "Идентификатор идеи", example = "1")
     private int ideaId;
 
     /**
@@ -38,10 +41,11 @@ public class IdeaReview {
     private Idea idea;
 
     /**
-     * Пользователь-эксперт, рассмотревший идею
+     * UUID пользователя-эксперта, рассмотревшего идею
      */
     @NotNull(message = "Idea reviewer UUID is required")
     @Column(name = "reviewer_user_uuid")
+    @Schema(description = "UUID пользователя-эксперта, рассмотревшего идею", example = "550e8400-e29b-41d4-a716-446655440000")
     private UUID reviewerUserUuid;
 
     /**
@@ -50,5 +54,6 @@ public class IdeaReview {
     @Enumerated(EnumType.STRING)
     @Column(name = "idea_status")
     @NotNull(message = "Idea status is required")
+    @Schema(description = "Статус идеи после рассмотрения", example = "APPROVED")
     private IdeaStatus ideaStatus;
 }
