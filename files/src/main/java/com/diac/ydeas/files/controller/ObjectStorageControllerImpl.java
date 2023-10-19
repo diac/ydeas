@@ -3,10 +3,9 @@ package com.diac.ydeas.files.controller;
 import com.diac.ydeas.domain.dto.FileDownloadResultDto;
 import com.diac.ydeas.domain.dto.StoredObjectDetailsDto;
 import com.diac.ydeas.files.service.ObjectStorageService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,14 +40,16 @@ public class ObjectStorageControllerImpl implements ObjectStorageController {
      * Загрузить файл из хранилища
      *
      * @param fileName Имя файла
-     * @return Тело ответа с ресурсом, содержащим скачиваемый файл
+     * @return Ресурс -- скачиваемый файл
      */
     @Override
-    public ResponseEntity<Resource> download(@PathVariable("fileName") String fileName) {
+    public Resource download(
+            @PathVariable("fileName") String fileName,
+            HttpServletResponse response
+    ) {
         FileDownloadResultDto fileDownloadResultDto = objectStorageService.download(fileName);
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(fileDownloadResultDto.mediaType()))
-                .body(fileDownloadResultDto.resource());
+        response.setContentType(fileDownloadResultDto.mediaType());
+        return fileDownloadResultDto.resource();
     }
 
     /**

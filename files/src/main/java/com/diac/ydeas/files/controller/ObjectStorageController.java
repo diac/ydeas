@@ -4,8 +4,8 @@ import com.diac.ydeas.domain.dto.StoredObjectDetailsDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,11 +31,16 @@ public interface ObjectStorageController {
      * Загрузить файл из хранилища
      *
      * @param fileName Имя файла
-     * @return Тело ответа с ресурсом, содержащим скачиваемый файл
+     * @param response Объект HttpServletResponse
+     * @return Ресурс -- скачиваемый файл
      */
     @GetMapping("/{fileName}")
     @Operation(summary = "Загрузить файл из хранилища")
-    ResponseEntity<Resource> download(@Parameter(description = "Имя файла") String fileName);
+    Resource download(
+            @Parameter(description = "Имя файла") String fileName,
+            HttpServletResponse response
+    );
+
     /**
      * Удалить файл из хранилища
      *
