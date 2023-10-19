@@ -5,10 +5,12 @@ import com.diac.ydeas.domain.model.MediaObject;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
@@ -25,14 +27,17 @@ public interface MediaObjectController {
      * @param multipartFile Файл
      * @param ideaId        Идентификатор идеи
      * @param principal     Объект Principal
-     * @return Тело ответа с прикрепленным медиа объектом
+     * @param response Объект HttpServletResponse
+     * @return Прикрепленный медиа-объект
      */
     @PostMapping("/upload_for_idea/{ideaId}")
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Загрузить файл для идеи")
-    ResponseEntity<MediaObject> uploadForIdea(
+    MediaObject uploadForIdea(
             @Parameter(description = "Файл") MultipartFile multipartFile,
             @Parameter(description = "Идентификатор идеи") int ideaId,
-            @Parameter(description = "Объект Principal") Principal principal
+            @Parameter(description = "Объект Principal") Principal principal,
+            HttpServletResponse response
     );
 
     /**
